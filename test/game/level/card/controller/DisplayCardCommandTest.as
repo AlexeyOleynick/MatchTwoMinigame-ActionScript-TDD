@@ -1,11 +1,15 @@
 /**
  * Created by OOliinyk on 1/12/14.
  */
-package game.level.field.controller {
+package game.level.card.controller {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 
+	import game.level.card.model.CardsEvent;
+	import game.level.card.model.ICardCollection;
+	import game.level.card.view.CardViewEvent;
 	import game.level.card.view.ICardView;
+	import game.level.field.model.vo.CardVo;
 
 	import mockolate.nice;
 	import mockolate.prepare;

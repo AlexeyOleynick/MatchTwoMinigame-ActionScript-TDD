@@ -4,7 +4,7 @@
 package game.startup {
 	import flash.events.IEventDispatcher;
 
-	import game.controller.GameEvent;
+	import game.level.field.controller.GameEvent;
 
 	import robotlegs.bender.bundles.mvcs.Command;
 

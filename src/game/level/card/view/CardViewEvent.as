@@ -1,11 +1,10 @@
 /**
  * Created by OOliinyk on 1/12/14.
  */
-package game.level.field.controller {
+package game.level.card.view {
 	import flash.events.Event;
 
-	import game.level.card.view.ICardView;
-
+	//todo: add test
 	public class CardViewEvent extends Event {
 		public var cardView:ICardView;
 

@@ -2,8 +2,8 @@
  * Created by OOliinyk on 2/16/14.
  */
 package game.level.field.model.updater {
-	import game.level.field.controller.CardVo;
-	import game.level.field.controller.ICardCollection;
+	import game.level.card.model.ICardCollection;
+	import game.level.field.model.vo.CardVo;
 
 	public class CardPositionUpdater implements ICardUpdater {
 

@@ -4,7 +4,7 @@
 package game.level.card.view {
 	import core.stage.IViewContainer;
 
-	import game.level.field.controller.CardVo;
+	import game.level.field.model.vo.CardVo;
 
 	public interface ICardView extends IViewContainer {
 

@@ -4,7 +4,7 @@
 package core.stage {
 	import org.flexunit.asserts.assertEquals;
 
-	public class ContextModelTest {
+	public class BasicContextModelTest {
 
 		[Test]
 		public function ShouldReturnCorrectValuesOnInitialize():void

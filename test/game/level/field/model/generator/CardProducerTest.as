@@ -4,9 +4,9 @@
 package game.level.field.model.generator {
 	import flash.events.Event;
 
-	import game.level.field.controller.ICardCollection;
-	import game.level.field.model.IBoundsService;
-	import game.level.field.model.ISolutionService;
+	import game.level.card.model.ICardCollection;
+	import game.level.field.model.bounds.IBoundsService;
+	import game.level.field.model.solution.ISolutionService;
 
 	import mockolate.nice;
 	import mockolate.prepare;

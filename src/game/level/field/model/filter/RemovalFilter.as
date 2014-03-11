@@ -2,10 +2,10 @@
  * Created by OOliinyk on 2/15/14.
  */
 package game.level.field.model.filter {
-	import game.level.field.controller.CardVo;
-	import game.level.field.controller.ICardCollection;
-	import game.level.field.controller.VectorCardCollection;
-	import game.level.field.model.IBoundsService;
+	import game.level.card.model.ICardCollection;
+	import game.level.card.model.VectorCardCollection;
+	import game.level.field.model.bounds.IBoundsService;
+	import game.level.field.model.vo.CardVo;
 
 	public class RemovalFilter implements ICardFilter {
 		[Inject]

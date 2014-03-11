@@ -2,9 +2,9 @@
  * Created by OOliinyk on 2/16/14.
  */
 package game.level.field.model.updater {
-	import game.level.field.controller.CardVo;
-	import game.level.field.controller.ICardCollection;
-	import game.level.field.controller.VectorCardCollection;
+	import game.level.card.model.ICardCollection;
+	import game.level.card.model.VectorCardCollection;
+	import game.level.field.model.vo.CardVo;
 
 	import org.flexunit.asserts.assertEquals;
 

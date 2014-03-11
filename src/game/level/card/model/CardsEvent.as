@@ -1,9 +1,10 @@
 /**
  * Created by OOliinyk on 1/12/14.
  */
-package game.level.field.controller {
+package game.level.card.model {
 	import flash.events.Event;
 
+	//todo: add test
 	public class CardsEvent extends Event {
 		public var cardCollection:ICardCollection;
 

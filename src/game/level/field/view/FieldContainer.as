@@ -6,6 +6,7 @@ package game.level.field.view {
 
 	import starling.display.Sprite;
 
+	//todo: add test
 	public class FieldContainer extends Sprite implements IFieldContainer {
 
 

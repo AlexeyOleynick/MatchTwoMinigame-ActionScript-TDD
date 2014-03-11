@@ -7,28 +7,22 @@ package game.level.field.controller {
 	import core.stage.IContextModel;
 	import core.stage.StageEvent;
 
-
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
-	import flash.geom.Rectangle;
 
-	import game.level.field.model.IBoundsService;
+	import game.level.field.model.bounds.IBoundsService;
 	import game.level.field.view.FieldContainer;
 
 	import mockolate.capture;
 	import mockolate.ingredients.Capture;
-
 	import mockolate.nice;
 	import mockolate.prepare;
-	import mockolate.received;
 	import mockolate.stub;
 
-	import org.flexunit.assertThat;
 	import org.flexunit.asserts.assertNotNull;
 	import org.flexunit.asserts.assertTrue;
 	import org.flexunit.async.Async;
-	import org.hamcrest.object.instanceOf;
 
 	import starling.textures.Texture;
 
@@ -38,7 +32,7 @@ package game.level.field.controller {
 		private var addFieldCommand:AddFieldCommand;
 
 		[Before(async)]
-		public function preapareMocks():void
+		public function prepareMocks():void
 		{
 			Async.handleEvent(this, prepare(IBoundsService, Texture, ITextureService), Event.COMPLETE, setUp);
 		}

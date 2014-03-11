@@ -4,6 +4,7 @@
 package game.startup {
 	import flash.events.Event;
 
+	//todo: this class is not required
 	public class StartupEvent extends Event {
 		public static const STARTUP:String = "STARTUP";
 

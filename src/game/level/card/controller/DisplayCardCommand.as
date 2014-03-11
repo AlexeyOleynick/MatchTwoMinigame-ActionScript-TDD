@@ -1,10 +1,14 @@
 /**
  * Created by OOliinyk on 1/12/14.
  */
-package game.level.field.controller {
+package game.level.card.controller {
 	import flash.events.IEventDispatcher;
 
+	import game.level.card.model.CardsEvent;
+	import game.level.card.model.VectorCardCollection;
+	import game.level.card.view.CardViewEvent;
 	import game.level.card.view.ICardView;
+	import game.level.field.model.vo.CardVo;
 
 	import robotlegs.bender.bundles.mvcs.Command;
 

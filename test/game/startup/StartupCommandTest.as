@@ -1,7 +1,7 @@
 package game.startup {
 	import flash.events.EventDispatcher;
 
-	import game.controller.GameEvent;
+	import game.level.field.controller.GameEvent;
 
 	import org.flexunit.async.Async;
 

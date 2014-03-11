@@ -5,10 +5,9 @@ package game.level.field.view {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 
+	import game.level.card.view.CardViewEvent;
 	import game.level.card.view.ICardView;
-	import game.level.field.controller.CardViewEvent;
 	import game.level.field.model.ICardsModel;
-	import game.level.view.FieldMediator;
 
 	import mockolate.nice;
 	import mockolate.prepare;

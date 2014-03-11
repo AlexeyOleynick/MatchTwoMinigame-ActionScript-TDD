@@ -1,7 +1,9 @@
 /**
  * Created by OOliinyk on 1/18/14.
  */
-package game.level.field.controller {
+package game.level.card.model {
+	import game.level.field.model.vo.CardVo;
+
 	import org.flexunit.asserts.assertEquals;
 	import org.flexunit.asserts.assertFalse;
 	import org.flexunit.asserts.assertTrue;

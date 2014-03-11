@@ -4,13 +4,13 @@
 package game.level.field.model {
 	import flash.events.IEventDispatcher;
 
-	import game.level.field.controller.CardVo;
-	import game.level.field.controller.CardsEvent;
-	import game.level.field.controller.ICardCollection;
-	import game.level.field.controller.VectorCardCollection;
+	import game.level.card.model.CardsEvent;
+	import game.level.card.model.ICardCollection;
+	import game.level.card.model.VectorCardCollection;
 	import game.level.field.model.filter.ICardFilter;
 	import game.level.field.model.generator.ICardProducer;
 	import game.level.field.model.updater.ICardUpdater;
+	import game.level.field.model.vo.CardVo;
 
 	public class DefaultCardsModel implements ICardsModel {
 

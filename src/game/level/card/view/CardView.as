@@ -5,8 +5,7 @@ package game.level.card.view {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 
-	import game.level.field.controller.CardViewEvent;
-	import game.level.field.controller.CardVo;
+	import game.level.field.model.vo.CardVo;
 
 	import starling.display.Sprite;
 

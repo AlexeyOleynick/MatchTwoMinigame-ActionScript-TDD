@@ -4,10 +4,10 @@
 package game.level.field.model.filter {
 	import flash.events.Event;
 
-	import game.level.field.controller.CardVo;
-	import game.level.field.controller.ICardCollection;
-	import game.level.field.controller.VectorCardCollection;
-	import game.level.field.model.IBoundsService;
+	import game.level.card.model.ICardCollection;
+	import game.level.card.model.VectorCardCollection;
+	import game.level.field.model.bounds.IBoundsService;
+	import game.level.field.model.vo.CardVo;
 
 	import mockolate.nice;
 	import mockolate.prepare;
