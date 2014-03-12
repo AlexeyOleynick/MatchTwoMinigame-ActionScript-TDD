@@ -20,11 +20,11 @@ package game.level.field.model {
 	import mockolate.received;
 	import mockolate.stub;
 
-	import org.flexunit.assertThat;
-	import org.flexunit.asserts.assertEquals;
-	import org.flexunit.asserts.assertFalse;
-	import org.flexunit.asserts.assertTrue;
 	import org.flexunit.async.Async;
+	import org.hamcrest.assertThat;
+	import org.hamcrest.core.not;
+	import org.hamcrest.object.equalTo;
+	import org.hamcrest.object.strictlyEqualTo;
 
 	public class CardsModelTest {
 		private var cardsModel:DefaultCardsModel;
@@ -63,11 +63,11 @@ package game.level.field.model {
 			var cardVo:CardVo = new CardVo(10, 10, 5, false);
 			var checkFunction:Function = function (e:CardsEvent, passThroughData:CardVo):void
 			{
-				assertEquals(e.cardCollection.getFirst(), passThroughData)
+				assertThat(e.cardCollection.getFirst(), strictlyEqualTo(passThroughData));
 			}
 			Async.handleEvent(this, cardsModel.dispatcher, CardsEventType.UPDATED, checkFunction, 300, cardVo);
 			cardsModel.select(cardVo);
-			assertTrue(cardVo.opened);
+			assertThat(cardVo.opened, equalTo(true));
 		}
 
 		[Test(async)]
@@ -76,7 +76,7 @@ package game.level.field.model {
 			var cardVo:CardVo = new CardVo(10, 10, 5, true);
 			var checkEventNotContains:Function = function (e:CardsEvent):void
 			{
-				assertFalse(e.cardCollection.getFirst() == cardVo);
+				assertThat(e.cardCollection.getFirst(), not(strictlyEqualTo(cardVo)));
 			}
 			cardsModel.dispatcher.addEventListener(CardsEventType.UPDATED, checkEventNotContains);
 			cardsModel.select(cardVo);
@@ -103,7 +103,7 @@ package game.level.field.model {
 
 			var checkEventNotContains:Function = function (e:CardsEvent):void
 			{
-				assertFalse(e.cardCollection == singleCardCollection);
+				assertThat(e.cardCollection, not(equalTo(singleCardCollection)));
 			}
 
 			cardsModel.dispatcher.addEventListener(CardsEventType.MATCHED, checkEventNotContains)
@@ -132,7 +132,7 @@ package game.level.field.model {
 			stub(cardsModel.cardCollection).method('getOpenedWithDifferentTypes').returns(singleCardCollection);
 			var checkEventNotContains:Function = function (e:CardsEvent):void
 			{
-				assertFalse(e.cardCollection == singleCardCollection);
+				assertThat(e.cardCollection, not(strictlyEqualTo(singleCardCollection)));
 			}
 			cardsModel.dispatcher.addEventListener(CardsEventType.UPDATED, checkEventNotContains)
 			var cardVo:CardVo = new CardVo(10, 10, 5, true);
@@ -178,7 +178,7 @@ package game.level.field.model {
 
 		private function eventShouldContainCollection(e:CardsEvent, collectionToCompate:ICardCollection):void
 		{
-			assertEquals(e.cardCollection, collectionToCompate);
+			assertThat(e.cardCollection, equalTo(collectionToCompate));
 		}
 
 		private function generateCollection():ICardCollection

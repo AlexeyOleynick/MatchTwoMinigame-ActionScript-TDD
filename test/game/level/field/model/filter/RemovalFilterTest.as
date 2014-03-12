@@ -13,9 +13,9 @@ package game.level.field.model.filter {
 	import mockolate.prepare;
 	import mockolate.stub;
 
-	import org.flexunit.asserts.assertFalse;
-	import org.flexunit.asserts.assertTrue;
+	import org.flexunit.assertThat;
 	import org.flexunit.async.Async;
+	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
 
 	public class RemovalFilterTest {
@@ -50,10 +50,10 @@ package game.level.field.model.filter {
 
 			removalFilter.fieldBoundsService = fieldBoundsService;
 			var filteredCollection:ICardCollection = removalFilter.filter(cardCollection);
-			assertFalse(filteredCollection.contains(firstCard));
-			assertFalse(filteredCollection.contains(secondCard));
-			assertTrue(filteredCollection.contains(thirdCard));
-			assertTrue(filteredCollection.contains(fourthCard));
+			assertThat(filteredCollection.contains(firstCard), equalTo(false));
+			assertThat(filteredCollection.contains(secondCard), equalTo(false));
+			assertThat(filteredCollection.contains(thirdCard), equalTo(true));
+			assertThat(filteredCollection.contains(fourthCard), equalTo(true));
 		}
 	}
 }

@@ -16,8 +16,9 @@ package game.level.card.controller {
 	import mockolate.prepare;
 	import mockolate.stub;
 
-	import org.flexunit.asserts.assertNotNull;
 	import org.flexunit.async.Async;
+	import org.hamcrest.assertThat;
+	import org.hamcrest.object.notNullValue;
 
 	public class DisplayCardCommandTest {
 
@@ -67,7 +68,7 @@ package game.level.card.controller {
 
 		private function eventShouldContainView(cardViewEvent:CardViewEvent, passThrough:Object):void
 		{
-			assertNotNull(cardViewEvent.cardView);
+			assertThat(cardViewEvent.cardView, notNullValue());
 		}
 
 

@@ -6,7 +6,8 @@ package game.level.field.model.updater {
 	import game.level.card.model.VectorCardCollection;
 	import game.level.field.model.vo.CardVo;
 
-	import org.flexunit.asserts.assertEquals;
+	import org.hamcrest.assertThat;
+	import org.hamcrest.object.equalTo;
 
 	public class CardPositionUpdaterTest {
 
@@ -20,7 +21,7 @@ package game.level.field.model.updater {
 			cardCollection.add(cardVo);
 
 			cardUpdater.update(cardCollection);
-			assertEquals(10 + cardUpdater.SPEED, cardVo.y);
+			assertThat(10 + cardUpdater.SPEED, equalTo(cardVo.y));
 		}
 	}
 }

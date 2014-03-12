@@ -14,7 +14,6 @@ package game.level.card.view {
 	import mockolate.stub;
 
 	import org.flexunit.assertThat;
-	import org.flexunit.asserts.assertTrue;
 	import org.flexunit.async.Async;
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
@@ -55,7 +54,7 @@ package game.level.card.view {
 
 		private function checkSelectEvent(e:Event, passThroughData:Object):void
 		{
-			assertTrue(e.type == StateViewEventType.OPEN);
+			assertThat(e.type, equalTo(StateViewEventType.OPEN));
 		}
 
 		private function createEndedTouchEvent():TouchEvent
@@ -71,10 +70,10 @@ package game.level.card.view {
 		[Test]
 		public function shouldContainOneEmptySpriteOnCreate():void
 		{
-			assertTrue(cardView.numChildren == 1);
-			assertTrue(cardView.getChildAt(0) is Sprite);
-			assertTrue((cardView.getChildAt(0) as Sprite).numChildren == 0);
-			assertTrue(cardView.getChildAt(0) == cardView.logiclessContainer);
+			assertThat(cardView.numChildren, equalTo(1));
+			assertThat(cardView.getChildAt(0), instanceOf(Sprite));
+			assertThat((cardView.getChildAt(0) as Sprite).numChildren, equalTo(0));
+			assertThat(cardView.getChildAt(0), equalTo(cardView.logiclessContainer));
 		}
 
 		[Test]

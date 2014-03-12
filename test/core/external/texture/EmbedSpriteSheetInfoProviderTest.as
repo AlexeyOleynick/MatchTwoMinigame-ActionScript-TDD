@@ -1,8 +1,7 @@
 package core.external.texture {
-	import flash.display.Bitmap;
-
-	import org.flexunit.asserts.assertNotNull;
-	import org.flexunit.asserts.assertTrue;
+	import org.hamcrest.assertThat;
+	import org.hamcrest.object.instanceOf;
+	import org.hamcrest.object.notNullValue;
 
 	public class EmbedSpriteSheetInfoProviderTest {
 
@@ -18,15 +17,15 @@ package core.external.texture {
 		[Test]
 		public function shouldReturnXML():void
 		{
-			assertNotNull(spriteSheetInfoProvider.getXML());
-			assertTrue(spriteSheetInfoProvider.getXML() is XML);
+			assertThat(spriteSheetInfoProvider.getXML(), notNullValue());
+			assertThat(spriteSheetInfoProvider.getXML(), instanceOf(XML));
 		}
 
 		[Test]
 		public function shouldReturnBitmap():void
 		{
-			assertNotNull(spriteSheetInfoProvider.getBitmap());
-			assertTrue(spriteSheetInfoProvider.getBitmap() is Bitmap);
+			assertThat(spriteSheetInfoProvider.getBitmap(), notNullValue());
+			assertThat(spriteSheetInfoProvider.getBitmap(), notNullValue());
 		}
 	}
 }

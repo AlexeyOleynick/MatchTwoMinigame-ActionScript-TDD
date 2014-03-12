@@ -15,7 +15,6 @@ package game.level.card.view {
 	import mockolate.received;
 	import mockolate.stub;
 
-	import org.flexunit.asserts.assertEquals;
 	import org.flexunit.async.Async;
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.equalTo;
@@ -75,8 +74,8 @@ package game.level.card.view {
 		public function shouldSetPropertiesFromVo():void
 		{
 			cardView.setCardVo(new CardVo(10, 5, 3, true));
-			assertEquals(cardView.x, 10);
-			assertEquals(cardView.y, 5);
+			assertThat(cardView.x, equalTo(10));
+			assertThat(cardView.y, equalTo(5));
 
 			assertThat(cardView.stateView, received().method('open').args(equalTo(3)));
 

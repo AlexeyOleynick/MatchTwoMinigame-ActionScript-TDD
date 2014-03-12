@@ -12,8 +12,11 @@ package game.level.field.model.generator {
 	import mockolate.prepare;
 	import mockolate.stub;
 
-	import org.flexunit.asserts.assertTrue;
 	import org.flexunit.async.Async;
+	import org.hamcrest.assertThat;
+	import org.hamcrest.number.greaterThanOrEqualTo;
+	import org.hamcrest.number.lessThanOrEqualTo;
+	import org.hamcrest.object.equalTo;
 
 	public class CardProducerTest {
 
@@ -45,8 +48,8 @@ package game.level.field.model.generator {
 
 			for(var cardsCount:int = 0; cardsCount < 100; cardsCount++){
 				var createdCollection:ICardCollection = cardProducer.produce();
-				assertTrue(createdCollection.getFirst().x >= 0);
-				assertTrue(createdCollection.getFirst().x <= 300);
+				assertThat(createdCollection.getFirst().x, greaterThanOrEqualTo(0));
+				assertThat(createdCollection.getFirst().x, lessThanOrEqualTo(300));
 			}
 		}
 
@@ -57,7 +60,7 @@ package game.level.field.model.generator {
 			stub(cardProducer.solutionService).method('getSolution').returns(false);
 			for(var cardsCount:int = 0; cardsCount < 100; cardsCount++){
 				var createdCollection:ICardCollection = cardProducer.produce();
-				assertTrue(createdCollection.getSize() == 0);
+				assertThat(createdCollection.getSize(), equalTo(0));
 			}
 		}
 	}

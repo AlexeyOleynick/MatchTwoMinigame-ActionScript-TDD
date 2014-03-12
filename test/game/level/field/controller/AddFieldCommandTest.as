@@ -20,9 +20,11 @@ package game.level.field.controller {
 	import mockolate.prepare;
 	import mockolate.stub;
 
-	import org.flexunit.asserts.assertNotNull;
-	import org.flexunit.asserts.assertTrue;
 	import org.flexunit.async.Async;
+	import org.hamcrest.assertThat;
+	import org.hamcrest.object.equalTo;
+	import org.hamcrest.object.instanceOf;
+	import org.hamcrest.object.notNullValue;
 
 	import starling.textures.Texture;
 
@@ -68,8 +70,8 @@ package game.level.field.controller {
 
 		private function eventShouldContainSprite(stageEvent:StageEvent, passThrough:Object):void
 		{
-			assertNotNull(stageEvent.getViewContainer());
-			assertTrue(stageEvent.getViewContainer() is FieldContainer);
+			assertThat(stageEvent.getViewContainer(), notNullValue());
+			assertThat(stageEvent.getViewContainer(), instanceOf(FieldContainer));
 		}
 
 
@@ -82,8 +84,8 @@ package game.level.field.controller {
 
 			var rectangle:Rectangle = captured.value as Rectangle;
 
-			assertTrue(rectangle.width == 100);
-			assertTrue(rectangle.height == 300);
+			assertThat(rectangle.width, equalTo(100));
+			assertThat(rectangle.height, equalTo(300));
 		}
 	}
 }

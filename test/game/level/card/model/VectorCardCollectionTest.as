@@ -4,9 +4,8 @@
 package game.level.card.model {
 	import game.level.field.model.vo.CardVo;
 
-	import org.flexunit.asserts.assertEquals;
-	import org.flexunit.asserts.assertFalse;
-	import org.flexunit.asserts.assertTrue;
+	import org.hamcrest.assertThat;
+	import org.hamcrest.object.equalTo;
 
 	public class VectorCardCollectionTest {
 		private var cardCollection:VectorCardCollection;
@@ -28,10 +27,10 @@ package game.level.card.model {
 
 			var matchedCards:ICardCollection = cardCollection.getOpened();
 
-			assertTrue(matchedCards.getSize() == 2);
-			assertTrue(matchedCards.contains(firstCard));
-			assertTrue(matchedCards.contains(thirdCard));
-			assertFalse(matchedCards.contains(secondCard));
+			assertThat(matchedCards.getSize(), equalTo(2));
+			assertThat(matchedCards.contains(firstCard), equalTo(true));
+			assertThat(matchedCards.contains(thirdCard), equalTo(true));
+			assertThat(matchedCards.contains(secondCard), equalTo(false));
 		}
 
 
@@ -47,8 +46,8 @@ package game.level.card.model {
 			collectionToSubtract.add(firstCard, secondCard);
 
 			cardCollection.removeCards(collectionToSubtract);
-			assertEquals('Size not decreased', 1, cardCollection.getSize());
-			assertEquals('Removed not correct cards', thirdCard, cardCollection.getFirst());
+			assertThat('Size not decreased', cardCollection.getSize(), equalTo(1));
+			assertThat('Removed not correct cards', cardCollection.getFirst(), equalTo(thirdCard));
 		}
 
 		[Test]
@@ -58,7 +57,7 @@ package game.level.card.model {
 			var secondCard:CardVo = new CardVo(20, 30, 5);
 			cardCollection.add(firstCard, secondCard);
 
-			assertTrue(cardCollection.getFirst() == firstCard);
+			assertThat(cardCollection.getFirst(), equalTo(firstCard));
 		}
 
 
@@ -71,7 +70,7 @@ package game.level.card.model {
 			var fourthCard:CardVo = new CardVo(25, 35, 2, true);
 			cardCollection.add(firstCard, secondCard, thirdCard, fourthCard);
 			var openedCards:ICardCollection = cardCollection.getOpenedWithDifferentTypes();
-			assertEquals(3, openedCards.getSize());
+			assertThat(openedCards.getSize(), equalTo(3));
 		}
 
 		[Test]
@@ -80,7 +79,7 @@ package game.level.card.model {
 			cardCollection.add(new CardVo(10, 10, 5));
 			cardCollection.add(new CardVo(10, 10, 5));
 
-			assertTrue(cardCollection.getSize() == 2);
+			assertThat(cardCollection.getSize(), equalTo(2));
 		}
 
 		[Test]
@@ -93,9 +92,9 @@ package game.level.card.model {
 			cardCollection.add(firstCard);
 			cardCollection.add(secondCard);
 
-			assertTrue(cardCollection.contains(firstCard));
-			assertTrue(cardCollection.contains(secondCard));
-			assertFalse(cardCollection.contains(thirdCard));
+			assertThat(cardCollection.contains(firstCard), equalTo(true));
+			assertThat(cardCollection.contains(secondCard), equalTo(true));
+			assertThat(cardCollection.contains(thirdCard), equalTo(false));
 		}
 
 
@@ -110,8 +109,8 @@ package game.level.card.model {
 
 			cardCollection.addCards(collectionToAdd);
 
-			assertTrue(cardCollection.contains(firstCard));
-			assertTrue(cardCollection.contains(secondCard));
+			assertThat(cardCollection.contains(firstCard), equalTo(true));
+			assertThat(cardCollection.contains(secondCard), equalTo(true));
 		}
 
 		[Test]
@@ -123,7 +122,7 @@ package game.level.card.model {
 			cardCollection.add(firstCard);
 			cardCollection.add(secondCard);
 
-			assertTrue(cardCollection.getAll().length == 2);
+			assertThat(cardCollection.getAll().length, equalTo(2));
 		}
 
 		[Test]
@@ -136,7 +135,7 @@ package game.level.card.model {
 			cardCollection.add(secondCard);
 			cardCollection.remove(firstCard);
 
-			assertTrue(cardCollection.getSize() == 1);
+			assertThat(cardCollection.getSize(), equalTo(1));
 		}
 	}
 }

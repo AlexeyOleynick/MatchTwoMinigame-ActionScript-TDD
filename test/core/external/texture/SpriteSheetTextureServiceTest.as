@@ -4,8 +4,10 @@ package core.external.texture {
 
 	import mockolate.prepare;
 
-	import org.flexunit.asserts.assertNotNull;
 	import org.flexunit.async.Async;
+	import org.hamcrest.assertThat;
+	import org.hamcrest.object.notNullValue;
+
 	[Ignore(description='Starling Texture.fromBitmap() does not work without stage')]
 	public class SpriteSheetTextureServiceTest extends Sprite {
 
@@ -28,7 +30,7 @@ package core.external.texture {
 		[Test]
 		public function shouldReturnTexture():void
 		{
-			assertNotNull(textureService.getTexture('close'));
+			assertThat(textureService.getTexture('close'), notNullValue());
 		}
 	}
 }

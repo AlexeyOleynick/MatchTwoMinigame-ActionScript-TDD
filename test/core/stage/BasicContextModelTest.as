@@ -2,7 +2,8 @@
  * Created by OOliinyk on 1/18/14.
  */
 package core.stage {
-	import org.flexunit.asserts.assertEquals;
+	import org.hamcrest.assertThat;
+	import org.hamcrest.object.equalTo;
 
 	public class BasicContextModelTest {
 
@@ -11,8 +12,8 @@ package core.stage {
 		{
 			var contextmodel:BasicContextModel = new BasicContextModel();
 			contextmodel.initialize(200, 300);
-			assertEquals(contextmodel.getWidth(), 200);
-			assertEquals(contextmodel.getHeight(), 300);
+			assertThat(contextmodel.getWidth(), equalTo(200));
+			assertThat(contextmodel.getHeight(), equalTo(300));
 		}
 	}
 }
