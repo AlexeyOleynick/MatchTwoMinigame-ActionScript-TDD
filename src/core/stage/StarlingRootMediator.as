@@ -4,7 +4,7 @@
 package core.stage {
 	import flash.events.Event;
 
-	import game.startup.StartupEvent;
+	import game.startup.StartupEventType;
 
 	import robotlegs.bender.bundles.mvcs.Mediator;
 
@@ -26,7 +26,7 @@ package core.stage {
 			addContextListener(StageEvent.ADD_TO_STAGE, addToStageListener, StageEvent);
 			view.addEventListener(EnterFrameEvent.ENTER_FRAME, stageEnterFrameListener);
 
-			dispatch(new StartupEvent(StartupEvent.STARTUP))
+			dispatch(new Event(StartupEventType.STARTUP));
 		}
 
 		private function stageEnterFrameListener(event:EnterFrameEvent):void

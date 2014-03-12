@@ -6,9 +6,16 @@ package game.level.field.view {
 
 	import starling.display.Sprite;
 
-	//todo: add test
 	public class FieldContainer extends Sprite implements IFieldContainer {
 
+		internal var logiclessContainer:Sprite;
+
+
+		public function FieldContainer()
+		{
+			logiclessContainer = new Sprite();
+			addChild(logiclessContainer);
+		}
 
 		public function getView():Sprite
 		{
@@ -18,7 +25,7 @@ package game.level.field.view {
 
 		public function addCard(cardView:ICardView):void
 		{
-			addChild(cardView.getView());
+			logiclessContainer.addChild(cardView.getView());
 		}
 	}
 }

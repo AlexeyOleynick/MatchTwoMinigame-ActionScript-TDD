@@ -6,6 +6,7 @@ package game.level.field.model {
 	import flash.events.EventDispatcher;
 
 	import game.level.card.model.CardsEvent;
+	import game.level.card.model.CardsEventType;
 	import game.level.card.model.ICardCollection;
 	import game.level.card.model.VectorCardCollection;
 	import game.level.field.model.filter.ICardFilter;
@@ -64,7 +65,7 @@ package game.level.field.model {
 			{
 				assertEquals(e.cardCollection.getFirst(), passThroughData)
 			}
-			Async.handleEvent(this, cardsModel.dispatcher, CardsEvent.UPDATED, checkFunction, 300, cardVo);
+			Async.handleEvent(this, cardsModel.dispatcher, CardsEventType.UPDATED, checkFunction, 300, cardVo);
 			cardsModel.select(cardVo);
 			assertTrue(cardVo.opened);
 		}
@@ -77,7 +78,7 @@ package game.level.field.model {
 			{
 				assertFalse(e.cardCollection.getFirst() == cardVo);
 			}
-			cardsModel.dispatcher.addEventListener(CardsEvent.UPDATED, checkEventNotContains);
+			cardsModel.dispatcher.addEventListener(CardsEventType.UPDATED, checkEventNotContains);
 			cardsModel.select(cardVo);
 		}
 
@@ -88,7 +89,7 @@ package game.level.field.model {
 			var collectionToMatch:ICardCollection = generateCollection();
 			stub(cardsModel.cardCollection).method('getOpened').returns(collectionToMatch);
 			var listener:Function = Async.asyncHandler(this, eventShouldContainCollection, 300, collectionToMatch);
-			cardsModel.dispatcher.addEventListener(CardsEvent.MATCHED, listener);
+			cardsModel.dispatcher.addEventListener(CardsEventType.MATCHED, listener);
 			cardsModel.select(new CardVo(10, 10, 5));
 
 		}
@@ -105,7 +106,7 @@ package game.level.field.model {
 				assertFalse(e.cardCollection == singleCardCollection);
 			}
 
-			cardsModel.dispatcher.addEventListener(CardsEvent.MATCHED, checkEventNotContains)
+			cardsModel.dispatcher.addEventListener(CardsEventType.MATCHED, checkEventNotContains)
 			stub(cardsModel.cardCollection).method('getOpened').returns(singleCardCollection);
 
 			cardsModel.select(new CardVo(10, 10, 5));
@@ -116,7 +117,7 @@ package game.level.field.model {
 		public function shouldDispatchUpdateEventIfDifferentPresent():void
 		{
 			var listener:Function = Async.asyncHandler(this, eventShouldContainCollection, 300, collectionWithOpenDifferentTypes);
-			cardsModel.dispatcher.addEventListener(CardsEvent.UPDATED, listener);
+			cardsModel.dispatcher.addEventListener(CardsEventType.UPDATED, listener);
 			var cardVo:CardVo = new CardVo(10, 10, 5, true);
 			cardsModel.select(cardVo);
 		}
@@ -133,7 +134,7 @@ package game.level.field.model {
 			{
 				assertFalse(e.cardCollection == singleCardCollection);
 			}
-			cardsModel.dispatcher.addEventListener(CardsEvent.UPDATED, checkEventNotContains)
+			cardsModel.dispatcher.addEventListener(CardsEventType.UPDATED, checkEventNotContains)
 			var cardVo:CardVo = new CardVo(10, 10, 5, true);
 			cardsModel.select(cardVo);
 		}
@@ -142,7 +143,7 @@ package game.level.field.model {
 		public function shouldDispatchCreateEventAndAddToCollectionIfProducerReturnsCards():void
 		{
 			var listener:Function = Async.asyncHandler(this, eventShouldContainCollection, 300, collectionToCreate);
-			cardsModel.dispatcher.addEventListener(CardsEvent.CREATED, listener);
+			cardsModel.dispatcher.addEventListener(CardsEventType.CREATED, listener);
 			cardsModel.stepForward();
 			assertThat(cardsModel.cardCollection, received().method('addCards').arg(collectionToCreate));
 		}
@@ -152,7 +153,7 @@ package game.level.field.model {
 		{
 			cardsModel.producer = nice(ICardProducer);
 			stub(cardsModel.producer).method("produce").returns(new VectorCardCollection());
-			Async.failOnEvent(this, cardsModel.dispatcher, CardsEvent.CREATED);
+			Async.failOnEvent(this, cardsModel.dispatcher, CardsEventType.CREATED);
 			cardsModel.stepForward();
 			assertThat(cardsModel.cardCollection, received().method('addCards').never());
 		}
@@ -161,7 +162,7 @@ package game.level.field.model {
 		public function shouldSendUpdateEventOnUpdate():void
 		{
 			var listener:Function = Async.asyncHandler(this, eventShouldContainCollection, 300, cardsModel.cardCollection);
-			cardsModel.dispatcher.addEventListener(CardsEvent.UPDATED, listener);
+			cardsModel.dispatcher.addEventListener(CardsEventType.UPDATED, listener);
 			cardsModel.stepForward();
 			assertThat(cardsModel.updater, received().method('update').arg(cardsModel.cardCollection).once());
 		}
@@ -169,7 +170,7 @@ package game.level.field.model {
 		[Test(async)]
 		public function shouldSendRemoveEvent():void
 		{
-			cardsModel.dispatcher.addEventListener(CardsEvent.REMOVED, Async.asyncHandler(this, eventShouldContainCollection, 300, collectionToRemove));
+			cardsModel.dispatcher.addEventListener(CardsEventType.REMOVED, Async.asyncHandler(this, eventShouldContainCollection, 300, collectionToRemove));
 			cardsModel.stepForward();
 			assertThat(cardsModel.cardCollection, received().method("removeCards").args(collectionToRemove));
 

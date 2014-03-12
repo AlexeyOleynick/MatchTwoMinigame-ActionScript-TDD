@@ -2,9 +2,10 @@
  * Created by OOliinyk on 1/12/14.
  */
 package game.startup {
+	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 
-	import game.level.field.controller.GameEvent;
+	import game.level.field.controller.GameEventType;
 
 	import robotlegs.bender.bundles.mvcs.Command;
 
@@ -16,7 +17,7 @@ package game.startup {
 
 		override public function execute():void
 		{
-			dispatcher.dispatchEvent(new GameEvent(GameEvent.ADD_FIELD));
+			dispatcher.dispatchEvent(new Event(GameEventType.ADD_FIELD));
 		}
 	}
 }

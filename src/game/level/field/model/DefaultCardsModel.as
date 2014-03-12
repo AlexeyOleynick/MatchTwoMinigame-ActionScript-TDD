@@ -5,6 +5,7 @@ package game.level.field.model {
 	import flash.events.IEventDispatcher;
 
 	import game.level.card.model.CardsEvent;
+	import game.level.card.model.CardsEventType;
 	import game.level.card.model.ICardCollection;
 	import game.level.card.model.VectorCardCollection;
 	import game.level.field.model.filter.ICardFilter;
@@ -39,7 +40,7 @@ package game.level.field.model {
 				cardVo.opened = true;
 				var cardsToSelect:ICardCollection = new VectorCardCollection();
 				cardsToSelect.add(cardVo);
-				dispatcher.dispatchEvent(new CardsEvent(CardsEvent.UPDATED, cardsToSelect));
+				dispatcher.dispatchEvent(new CardsEvent(CardsEventType.UPDATED, cardsToSelect));
 			}
 		}
 
@@ -48,7 +49,7 @@ package game.level.field.model {
 			var openedCards:ICardCollection = cardCollection.getOpenedWithDifferentTypes();
 			if(openedCards.getSize() > 1){
 				openedCards.closeAll();
-				dispatcher.dispatchEvent(new CardsEvent(CardsEvent.UPDATED, openedCards));
+				dispatcher.dispatchEvent(new CardsEvent(CardsEventType.UPDATED, openedCards));
 			}
 		}
 
@@ -56,7 +57,7 @@ package game.level.field.model {
 		{
 			var matchedCards:ICardCollection = cardCollection.getOpened();
 			if(matchedCards.getSize() > 1){
-				dispatcher.dispatchEvent(new CardsEvent(CardsEvent.MATCHED, matchedCards));
+				dispatcher.dispatchEvent(new CardsEvent(CardsEventType.MATCHED, matchedCards));
 				cardCollection.removeCards(matchedCards);
 			}
 		}
@@ -73,21 +74,21 @@ package game.level.field.model {
 			var cardsToRemove:ICardCollection = removalFilter.filter(cardCollection);
 			if(cardsToRemove.getSize() > 0){
 				cardCollection.removeCards(cardsToRemove);
-				dispatcher.dispatchEvent(new CardsEvent(CardsEvent.REMOVED, cardsToRemove));
+				dispatcher.dispatchEvent(new CardsEvent(CardsEventType.REMOVED, cardsToRemove));
 			}
 		}
 
 		private function updateAllCards():void
 		{
 			updater.update(cardCollection);
-			dispatcher.dispatchEvent(new CardsEvent(CardsEvent.UPDATED, cardCollection));
+			dispatcher.dispatchEvent(new CardsEvent(CardsEventType.UPDATED, cardCollection));
 		}
 
 		private function createNewCards():void
 		{
 			var producedCards:ICardCollection = producer.produce();
 			if(producedCards.getSize() > 0){
-				dispatcher.dispatchEvent(new CardsEvent(CardsEvent.CREATED, producedCards));
+				dispatcher.dispatchEvent(new CardsEvent(CardsEventType.CREATED, producedCards));
 				cardCollection.addCards(producedCards);
 			}
 		}

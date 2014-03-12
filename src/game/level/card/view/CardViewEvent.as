@@ -4,7 +4,6 @@
 package game.level.card.view {
 	import flash.events.Event;
 
-	//todo: add test
 	public class CardViewEvent extends Event {
 		public var cardView:ICardView;
 

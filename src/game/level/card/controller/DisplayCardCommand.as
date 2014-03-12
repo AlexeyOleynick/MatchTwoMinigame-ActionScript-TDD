@@ -5,6 +5,7 @@ package game.level.card.controller {
 	import flash.events.IEventDispatcher;
 
 	import game.level.card.model.CardsEvent;
+	import game.level.card.model.CardsEventType;
 	import game.level.card.model.VectorCardCollection;
 	import game.level.card.view.CardViewEvent;
 	import game.level.card.view.ICardView;
@@ -37,7 +38,7 @@ package game.level.card.controller {
 			for each (var cardVo:CardVo in event.cardCollection.getAll()){
 				var singleCardCollection:VectorCardCollection = new VectorCardCollection();
 				singleCardCollection.add(cardVo);
-				dispatcher.dispatchEvent(new CardsEvent(CardsEvent.CREATED, singleCardCollection));
+				dispatcher.dispatchEvent(new CardsEvent(CardsEventType.CREATED, singleCardCollection));
 			}
 		}
 

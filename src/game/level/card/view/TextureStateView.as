@@ -105,7 +105,6 @@ package game.level.card.view {
 		private function touchListener(event:TouchEvent):void
 		{
 			var touch:Touch = event.getTouch(logiclessContainer, TouchPhase.ENDED);
-			//todo: Refactor this shit
 			if(touch){
 				if(!isWaitingForClose() || isClosed())
 					eventDispatcher.dispatchEvent(new flash.events.Event(StateViewEventType.OPEN));

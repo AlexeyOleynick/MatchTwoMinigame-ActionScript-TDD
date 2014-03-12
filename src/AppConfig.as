@@ -14,6 +14,7 @@ package {
 
 	import game.level.card.controller.DisplayCardCommand;
 	import game.level.card.model.CardsEvent;
+	import game.level.card.model.CardsEventType;
 	import game.level.card.model.ICardCollection;
 	import game.level.card.model.VectorCardCollection;
 	import game.level.card.view.CardMediator;
@@ -22,7 +23,7 @@ package {
 	import game.level.card.view.IStateView;
 	import game.level.card.view.TextureStateView;
 	import game.level.field.controller.AddFieldCommand;
-	import game.level.field.controller.GameEvent;
+	import game.level.field.controller.GameEventType;
 	import game.level.field.model.DefaultCardsModel;
 	import game.level.field.model.ICardsModel;
 	import game.level.field.model.bounds.IBoundsService;
@@ -38,7 +39,7 @@ package {
 	import game.level.field.view.FieldMediator;
 	import game.level.field.view.IFieldContainer;
 	import game.startup.StartupCommand;
-	import game.startup.StartupEvent;
+	import game.startup.StartupEventType;
 
 	import robotlegs.bender.extensions.contextView.ContextView;
 	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
@@ -76,9 +77,9 @@ package {
 			context.logLevel = LogLevel.DEBUG;
 			logger.info("configuring application");
 
-			commandMap.map(GameEvent.ADD_FIELD, GameEvent).toCommand(AddFieldCommand);
-			commandMap.map(StartupEvent.STARTUP).toCommand(StartupCommand);
-			commandMap.map(CardsEvent.CREATED, CardsEvent).toCommand(DisplayCardCommand);
+			commandMap.map(GameEventType.ADD_FIELD).toCommand(AddFieldCommand);
+			commandMap.map(StartupEventType.STARTUP).toCommand(StartupCommand);
+			commandMap.map(CardsEventType.CREATED, CardsEvent).toCommand(DisplayCardCommand);
 
 			mediatorMap.map(StarlingStageView).toMediator(StarlingRootMediator);
 			mediatorMap.map(ICardView).toMediator(CardMediator);

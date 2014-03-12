@@ -6,6 +6,7 @@ package game.level.card.controller {
 	import flash.events.EventDispatcher;
 
 	import game.level.card.model.CardsEvent;
+	import game.level.card.model.CardsEventType;
 	import game.level.card.model.ICardCollection;
 	import game.level.card.view.CardViewEvent;
 	import game.level.card.view.ICardView;
@@ -37,7 +38,7 @@ package game.level.card.controller {
 			var displayCardCommand:DisplayCardCommand = new DisplayCardCommand();
 			displayCardCommand.dispatcher = new EventDispatcher();
 			displayCardCommand.cardView = nice(ICardView);
-			displayCardCommand.event = new CardsEvent(CardsEvent.CREATED, cardCollection);
+			displayCardCommand.event = new CardsEvent(CardsEventType.CREATED, cardCollection);
 			displayCardCommand.dispatcher.addEventListener(CardViewEvent.DISPLAY, Async.asyncHandler(this, eventShouldContainView, 100));
 			displayCardCommand.execute();
 		}
@@ -52,8 +53,8 @@ package game.level.card.controller {
 
 			var displayCardCommand:DisplayCardCommand = new DisplayCardCommand();
 			displayCardCommand.dispatcher = new EventDispatcher();
-			displayCardCommand.event = new CardsEvent(CardsEvent.CREATED, cardCollection);
-			Async.proceedOnEvent(this, displayCardCommand.dispatcher, CardsEvent.CREATED);
+			displayCardCommand.event = new CardsEvent(CardsEventType.CREATED, cardCollection);
+			Async.proceedOnEvent(this, displayCardCommand.dispatcher, CardsEventType.CREATED);
 			displayCardCommand.execute();
 		}
 
