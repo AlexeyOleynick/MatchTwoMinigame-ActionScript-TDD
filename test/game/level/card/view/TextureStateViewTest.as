@@ -100,7 +100,7 @@ package game.level.card.view {
 			cardView.logiclessContainer = partial(Sprite);
 			cardView.closeWithDelay(100);
 			Async.delayCall(this, checkNotClosed, 50);
-			Async.delayCall(this, checkClosed, 110);
+			Async.delayCall(this, checkClosed, 150);
 		}
 
 		private function checkNotClosed():void
