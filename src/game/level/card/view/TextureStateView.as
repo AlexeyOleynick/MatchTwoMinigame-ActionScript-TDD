@@ -112,11 +112,6 @@ package game.level.card.view {
 					touchSignal.dispatch();
 			}
 		}
-		                        //todo: ??????
-		override public function dispatchEvent(event:Event):void
-		{
-			super.dispatchEvent(event);
-		}
 
 		public function getView():Sprite
 		{
