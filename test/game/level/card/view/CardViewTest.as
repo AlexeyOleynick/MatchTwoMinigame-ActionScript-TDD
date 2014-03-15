@@ -3,7 +3,6 @@
  */
 package game.level.card.view {
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
 
 	import game.level.field.model.vo.CardVo;
 
@@ -19,6 +18,7 @@ package game.level.card.view {
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
+	import org.osflash.signals.Signal;
 
 	import starling.display.Sprite;
 	import starling.textures.Texture;
@@ -28,11 +28,12 @@ package game.level.card.view {
 		private var cardView:CardView;
 		private var stateView:IStateView;
 
+		private var selectListener:Function;
 
 		[Before(async)]
 		public function prepareMocks():void
 		{
-			Async.handleEvent(this, prepare(IStateView, Texture, Sprite, CardView, EventDispatcher), Event.COMPLETE, setUp);
+			Async.handleEvent(this, prepare(IStateView, Texture, Sprite, CardView), Event.COMPLETE, setUp);
 		}
 
 		private function setUp(e:Event, pathThroughData:Object):void
@@ -43,9 +44,9 @@ package game.level.card.view {
 			var captured:Capture = new Capture();
 			stub(stateView).method("addOpenListener").args(capture(captured));
 			cardView = new CardView(stateView);
-			cardView.eventDispatcher = partial(EventDispatcher);
+			cardView.stateViewOpenedSignal = new Signal();
 
-			(captured.value as Function)(new Event(CardViewEvent.SELECT));
+			selectListener = captured.value;
 		}
 
 
@@ -55,19 +56,12 @@ package game.level.card.view {
 			assertThat(cardView.stateView, received().method('close').once());
 		}
 
-		[Test]
-		public function shouldDispatchSelectEventWhenStateViewDispatchSelectEvent():void
+		[Test(async)]
+		public function shouldRunExternalSelectListenerWhenStateViewDispatchSelectEvent():void
 		{
-			assertThat(cardView.eventDispatcher, received().method('dispatchEvent').args(instanceOf(Event)));
-		}
-
-
-		[Test]
-		public function shouldAddSelectEventToDispatcher():void
-		{
-			var listener:Function = new Function();
-			cardView.addSelectListener(listener);
-			assertThat(cardView.eventDispatcher, received().method("addEventListener").args(CardViewEvent.SELECT, listener));
+			var externalSelectListener:Function = Async.asyncHandler(this, new Function(),500);
+			cardView.addSelectListener(externalSelectListener);
+			selectListener();
 		}
 
 		[Test]

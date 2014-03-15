@@ -2,9 +2,10 @@
  * Created by OOliinyk on 1/11/14.
  */
 package core.stage {
-	import flash.events.Event;
+	import core.signal.StartupSignal;
+	import core.stage.signal.AddToStageSignal;
+	import core.stage.signal.EnterFrameSignal;
 
-	import game.startup.StartupEventType;
 
 	import robotlegs.bender.bundles.mvcs.Mediator;
 
@@ -16,27 +17,32 @@ package core.stage {
 		public var view:StarlingStageView;
 		[Inject]
 		public var contextModel:IContextModel;
-
+		[Inject]
+		public var startupSignal:StartupSignal;
+		[Inject]
+		public var enterFrameSignal:EnterFrameSignal;
+		[Inject]
+		public var addToStageSignal:AddToStageSignal;
 
 		override public function initialize():void
 		{
 			super.initialize();
 
 			contextModel.initialize(view.stage.stageWidth, view.stage.stageHeight);
-			addContextListener(StageEvent.ADD_TO_STAGE, addToStageListener, StageEvent);
-			view.addEventListener(EnterFrameEvent.ENTER_FRAME, stageEnterFrameListener);
 
-			dispatch(new Event(StartupEventType.STARTUP));
+			addToStageSignal.add(addToStageListener)
+			view.addEventListener(EnterFrameEvent.ENTER_FRAME, stageEnterFrameListener);
+			startupSignal.dispatch();
 		}
 
 		private function stageEnterFrameListener(event:EnterFrameEvent):void
 		{
-			dispatch(new Event(Event.ENTER_FRAME));
+			enterFrameSignal.dispatch();
 		}
 
-		private function addToStageListener(e:StageEvent):void
+		private function addToStageListener(viewContainer:IViewContainer):void
 		{
-			view.addChild(e.getViewContainer().getView())
+			view.addChild(viewContainer.getView());
 		}
 	}
 }

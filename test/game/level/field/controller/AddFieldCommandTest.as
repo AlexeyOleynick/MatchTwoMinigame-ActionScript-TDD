@@ -5,26 +5,25 @@ package game.level.field.controller {
 	import core.external.texture.ITextureService;
 	import core.stage.BasicContextModel;
 	import core.stage.IContextModel;
-	import core.stage.StageEvent;
+	import core.stage.signal.AddToStageSignal;
 
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
 
 	import game.level.field.model.bounds.IBoundsService;
-	import game.level.field.view.FieldContainer;
+	import game.level.field.view.IFieldContainer;
 
 	import mockolate.capture;
 	import mockolate.ingredients.Capture;
 	import mockolate.nice;
 	import mockolate.prepare;
+	import mockolate.received;
 	import mockolate.stub;
 
 	import org.flexunit.async.Async;
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
-	import org.hamcrest.object.notNullValue;
 
 	import starling.textures.Texture;
 
@@ -36,7 +35,7 @@ package game.level.field.controller {
 		[Before(async)]
 		public function prepareMocks():void
 		{
-			Async.handleEvent(this, prepare(IBoundsService, Texture, ITextureService), Event.COMPLETE, setUp);
+			Async.handleEvent(this, prepare(AddToStageSignal, IBoundsService, Texture, ITextureService), Event.COMPLETE, setUp);
 		}
 
 
@@ -45,7 +44,7 @@ package game.level.field.controller {
 
 			addFieldCommand = new AddFieldCommand();
 			addFieldCommand.boundsService = nice(IBoundsService);
-			addFieldCommand.dispatcher = new EventDispatcher();
+			addFieldCommand.addToStageSignal = nice(AddToStageSignal);
 
 			var texture:Texture = nice(Texture);
 			stub(texture).getter('nativeWidth').returns(100);
@@ -63,17 +62,9 @@ package game.level.field.controller {
 		[Test(async)]
 		public function shouldAddFieldSpriteToContextView():void
 		{
-			addFieldCommand.dispatcher.addEventListener(StageEvent.ADD_TO_STAGE, Async.asyncHandler(this, eventShouldContainSprite, 100));
 			addFieldCommand.execute();
-
+			assertThat(addFieldCommand.addToStageSignal, received().method('dispatch').args(instanceOf(IFieldContainer)));
 		}
-
-		private function eventShouldContainSprite(stageEvent:StageEvent, passThrough:Object):void
-		{
-			assertThat(stageEvent.getViewContainer(), notNullValue());
-			assertThat(stageEvent.getViewContainer(), instanceOf(FieldContainer));
-		}
-
 
 		[Test]
 		public function shouldSetBoundsForBoundsService():void

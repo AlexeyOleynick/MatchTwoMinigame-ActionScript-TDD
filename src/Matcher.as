@@ -8,6 +8,7 @@ package {
 
 	import robotlegs.bender.bundles.mvcs.MVCSBundle;
 	import robotlegs.bender.extensions.contextView.ContextView;
+	import robotlegs.bender.extensions.signalCommandMap.SignalCommandMapExtension;
 	import robotlegs.bender.framework.api.IContext;
 	import robotlegs.bender.framework.impl.Context;
 	import robotlegs.extensions.starlingViewMap.StarlingViewMapExtension;
@@ -32,7 +33,7 @@ package {
 			starling.start();
 
 			context = new Context();
-			context.install(MVCSBundle, StarlingViewMapExtension);
+			context.install(MVCSBundle, StarlingViewMapExtension, SignalCommandMapExtension);
 			context.configure(AppConfig, this, starling);
 			context.configure(new ContextView(this));
 		}

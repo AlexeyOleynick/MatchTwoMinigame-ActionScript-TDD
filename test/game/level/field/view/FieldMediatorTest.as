@@ -2,10 +2,11 @@
  * Created by OOliinyk on 1/12/14.
  */
 package game.level.field.view {
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
+	import core.stage.signal.EnterFrameSignal;
 
-	import game.level.card.view.CardViewEvent;
+	import flash.events.Event;
+
+	import game.level.card.signal.DisplayCardsSignal;
 	import game.level.card.view.ICardView;
 	import game.level.field.model.ICardsModel;
 
@@ -23,10 +24,10 @@ package game.level.field.view {
 
 		private var fieldMediator:FieldMediator;
 
-		[Before(async, timeout=5000)]
-		public function prepareMockolates():void
+		[Before(async)]
+		public function prepareMocks():void
 		{
-			Async.proceedOnEvent(this, prepare(IFieldContainer, ICardsModel, ICardView), Event.COMPLETE);
+			Async.proceedOnEvent(this, prepare(DisplayCardsSignal, IFieldContainer, ICardsModel, ICardView), Event.COMPLETE);
 		}
 
 
@@ -34,8 +35,9 @@ package game.level.field.view {
 		public function setUp():void
 		{
 			fieldMediator = new FieldMediator();
-			fieldMediator.eventDispatcher = new EventDispatcher();
 			fieldMediator.eventMap = new EventMap();
+			fieldMediator.displayCardsSignal = new DisplayCardsSignal();
+			fieldMediator.enterFrameSignal = new EnterFrameSignal();
 			fieldMediator.initialize();
 		}
 
@@ -44,7 +46,7 @@ package game.level.field.view {
 		{
 			var cardsModel:ICardsModel = nice(ICardsModel);
 			fieldMediator.cardsModel = cardsModel;
-			fieldMediator.eventDispatcher.dispatchEvent(new Event(Event.ENTER_FRAME));
+			fieldMediator.enterFrameSignal.dispatch();
 			assertThat(cardsModel, received().method('stepForward'));
 		}
 
@@ -54,12 +56,10 @@ package game.level.field.view {
 			var fieldContainer:IFieldContainer = nice(IFieldContainer);
 			fieldMediator.view = fieldContainer;
 			var cardView:ICardView = nice(ICardView);
-			var event:CardViewEvent = new CardViewEvent(CardViewEvent.DISPLAY, cardView);
 
-			fieldMediator.eventDispatcher.dispatchEvent(event);
+			fieldMediator.displayCardsSignal.dispatch(cardView);
+
 			assertThat(fieldContainer, received().method("addCard").args(strictlyEqualTo(cardView)));
 		}
-
-
 	}
 }

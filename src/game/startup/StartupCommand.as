@@ -2,22 +2,19 @@
  * Created by OOliinyk on 1/12/14.
  */
 package game.startup {
-	import flash.events.Event;
-	import flash.events.IEventDispatcher;
-
-	import game.level.field.controller.GameEventType;
+	import game.level.field.signal.AddFieldSignal;
 
 	import robotlegs.bender.bundles.mvcs.Command;
 
 	public class StartupCommand extends Command {
 
 		[Inject]
-		public var dispatcher:IEventDispatcher;
+		public var addFieldSignal:AddFieldSignal;
 
 
 		override public function execute():void
 		{
-			dispatcher.dispatchEvent(new Event(GameEventType.ADD_FIELD));
+			addFieldSignal.dispatch();
 		}
 	}
 }

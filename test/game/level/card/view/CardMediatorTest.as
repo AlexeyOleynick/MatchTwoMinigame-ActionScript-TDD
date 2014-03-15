@@ -3,11 +3,11 @@
  */
 package game.level.card.view {
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
 
-	import game.level.card.model.CardsEvent;
-	import game.level.card.model.CardsEventType;
 	import game.level.card.model.ICardCollection;
+	import game.level.card.signal.CardsMatchedSignal;
+	import game.level.card.signal.CardsRemovedSignal;
+	import game.level.card.signal.CardsUpdatedSignal;
 	import game.level.field.model.ICardsModel;
 	import game.level.field.model.vo.CardVo;
 
@@ -23,72 +23,70 @@ package game.level.card.view {
 	import org.hamcrest.object.instanceOf;
 	import org.hamcrest.object.strictlyEqualTo;
 
-	import robotlegs.bender.extensions.localEventMap.impl.EventMap;
-
 	public class CardMediatorTest {
 
 
 		private var cardCollection:ICardCollection;
 		private var cardMediator:CardMediator;
+		private var selectListener:Function;
 
-		[Before(async, timeout=5000)]
-		public function prepareMockolates():void
+		[Before(async)]
+		public function prepareMocks():void
 		{
-			Async.handleEvent(this, prepare(ICardView, ICardCollection, ICardsModel, EventDispatcher), Event.COMPLETE, setUp);
+			Async.handleEvent(this, prepare(ICardView, ICardCollection, ICardsModel), Event.COMPLETE, setUp);
 		}
 
 
 		public function setUp(e:Event, pathThroughData:Object):void
 		{
 			cardMediator = new CardMediator();
-			cardMediator.eventDispatcher = new EventDispatcher();
-			cardMediator.eventMap = new EventMap();
 
 			cardMediator.cardsModel = nice(ICardsModel);
-
-
-			var cardContainer:ICardView = nice(ICardView);
+			var cardView:ICardView = nice(ICardView);
 
 			var captured:Capture = new Capture();
-			stub(cardContainer).method("addSelectListener").args(capture(captured));
+			stub(cardView).method("addSelectListener").args(capture(captured));
 
-			cardMediator.view = cardContainer;
+			cardMediator.view = cardView;
 			stub(cardMediator.view).method("getCardVo").returns(new CardVo(10, 10, 5));
+
 			cardCollection = nice(ICardCollection);
 			stub(cardCollection).method("contains").returns(true);
-			cardMediator.initialize();
 
-			captured.value(new CardViewEvent(CardViewEvent.SELECT, cardMediator.view));
+			cardMediator.cardsUpdatedSignal = new CardsUpdatedSignal();
+			cardMediator.cardsMatchedSignal = new CardsMatchedSignal();
+			cardMediator.cardsRemovedSignal = new CardsRemovedSignal();
+
+			cardMediator.initialize();
+			selectListener = captured.value;
 		}
 
 
 		[Test]
 		public function shouldUpdateModelOnSelect():void
 		{
+			selectListener();
 			assertThat(cardMediator.cardsModel, received().method('select').args(strictlyEqualTo(cardMediator.view.getCardVo())));
 		}
 
 		[Test]
-		public function shouldUpdateViewWithVoOnEvent():void
+		public function shouldUpdateViewWithVoOnUpdatedSignal():void
 		{
-			var cardsEvent:CardsEvent = new CardsEvent(CardsEventType.UPDATED, cardCollection);
-			cardMediator.eventDispatcher.dispatchEvent(cardsEvent);
+			cardMediator.cardsUpdatedSignal.dispatch(cardCollection);
 			assertThat(cardMediator.view, received().method('setCardVo').args(instanceOf(CardVo)));
 		}
 
 		[Test]
-		public function shouldExecuteShowAnimOnEvent():void
+		public function shouldExecuteShowAnimOnMatchedSignal():void
 		{
-			var cardsEvent:CardsEvent = new CardsEvent(CardsEventType.MATCHED, cardCollection);
-			cardMediator.eventDispatcher.dispatchEvent(cardsEvent);
+			cardMediator.cardsMatchedSignal.dispatch(cardCollection);
 			assertThat(cardMediator.view, received().method('showMatchAnimation'));
 		}
 
 		[Test]
-		public function shouldRemoveOnEvent():void
+		public function shouldRemoveOnRemovedSignal():void
 		{
-			var cardsEvent:CardsEvent = new CardsEvent(CardsEventType.REMOVED, cardCollection);
-			cardMediator.eventDispatcher.dispatchEvent(cardsEvent);
+			cardMediator.cardsRemovedSignal.dispatch(cardCollection);
 			assertThat(cardMediator.view, received().method('remove'));
 		}
 

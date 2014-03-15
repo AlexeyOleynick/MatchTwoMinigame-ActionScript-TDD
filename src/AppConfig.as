@@ -4,26 +4,29 @@ package {
 	import core.external.texture.ISpriteSheetInfoProvider;
 	import core.external.texture.ITextureService;
 	import core.external.texture.SpriteSheetTextureService;
+	import core.signal.StartupSignal;
 	import core.stage.BasicContextModel;
 	import core.stage.IContextModel;
 	import core.stage.StarlingRootMediator;
 	import core.stage.StarlingStageView;
+	import core.stage.signal.AddToStageSignal;
+	import core.stage.signal.EnterFrameSignal;
 
-	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
 
 	import game.level.card.controller.DisplayCardCommand;
-	import game.level.card.model.CardsEvent;
-	import game.level.card.model.CardsEventType;
 	import game.level.card.model.ICardCollection;
 	import game.level.card.model.VectorCardCollection;
+	import game.level.card.signal.CardsCreatedSignal;
+	import game.level.card.signal.CardsMatchedSignal;
+	import game.level.card.signal.CardsRemovedSignal;
+	import game.level.card.signal.CardsUpdatedSignal;
+	import game.level.card.signal.DisplayCardsSignal;
 	import game.level.card.view.CardMediator;
 	import game.level.card.view.CardView;
 	import game.level.card.view.ICardView;
 	import game.level.card.view.IStateView;
 	import game.level.card.view.TextureStateView;
 	import game.level.field.controller.AddFieldCommand;
-	import game.level.field.controller.GameEventType;
 	import game.level.field.model.DefaultCardsModel;
 	import game.level.field.model.ICardsModel;
 	import game.level.field.model.bounds.IBoundsService;
@@ -36,14 +39,17 @@ package {
 	import game.level.field.model.solution.RandomSolutionService;
 	import game.level.field.model.updater.CardPositionUpdater;
 	import game.level.field.model.updater.ICardUpdater;
+	import game.level.field.signal.AddFieldSignal;
 	import game.level.field.view.FieldMediator;
 	import game.level.field.view.IFieldContainer;
 	import game.startup.StartupCommand;
-	import game.startup.StartupEventType;
+
+	import org.osflash.signals.ISignal;
+	import org.osflash.signals.Signal;
 
 	import robotlegs.bender.extensions.contextView.ContextView;
-	import robotlegs.bender.extensions.eventCommandMap.api.IEventCommandMap;
 	import robotlegs.bender.extensions.mediatorMap.api.IMediatorMap;
+	import robotlegs.bender.extensions.signalCommandMap.api.ISignalCommandMap;
 	import robotlegs.bender.framework.api.IConfig;
 	import robotlegs.bender.framework.api.IContext;
 	import robotlegs.bender.framework.api.IInjector;
@@ -55,7 +61,7 @@ package {
 		public var context:IContext;
 
 		[Inject]
-		public var commandMap:IEventCommandMap;
+		public var commandMap:ISignalCommandMap;
 
 		[Inject]
 		public var mediatorMap:IMediatorMap;
@@ -69,17 +75,27 @@ package {
 		[Inject]
 		public var contextView:ContextView;
 
-		[Inject]
-		public var dispatcher:IEventDispatcher;
-
 		public function configure():void
 		{
 			context.logLevel = LogLevel.DEBUG;
 			logger.info("configuring application");
 
-			commandMap.map(GameEventType.ADD_FIELD).toCommand(AddFieldCommand);
-			commandMap.map(StartupEventType.STARTUP).toCommand(StartupCommand);
-			commandMap.map(CardsEventType.CREATED, CardsEvent).toCommand(DisplayCardCommand);
+			//todo: ????
+			injector.map(Signal).toType(Signal);
+
+			injector.map(EnterFrameSignal).asSingleton();
+			injector.map(AddToStageSignal).asSingleton();
+
+			injector.map(CardsCreatedSignal).asSingleton();
+			injector.map(CardsMatchedSignal).asSingleton();
+			injector.map(CardsRemovedSignal).asSingleton();
+			injector.map(CardsUpdatedSignal).asSingleton();
+
+			injector.map(DisplayCardsSignal).asSingleton();
+
+			commandMap.map(StartupSignal).toCommand(StartupCommand);
+			commandMap.map(AddFieldSignal).toCommand(AddFieldCommand);
+			commandMap.map(CardsCreatedSignal).toCommand(DisplayCardCommand);
 
 			mediatorMap.map(StarlingStageView).toMediator(StarlingRootMediator);
 			mediatorMap.map(ICardView).toMediator(CardMediator);
@@ -92,7 +108,6 @@ package {
 			injector.map(IBoundsService).toSingleton(RectangleBoundsService);
 			injector.map(ICardsModel).toSingleton(DefaultCardsModel);
 			injector.map(ITextureService).toSingleton(SpriteSheetTextureService);
-			injector.map(EventDispatcher, 'local').toType(EventDispatcher);
 
 			injector.map(ICardFilter, 'removal filter').toSingleton(RemovalFilter);
 			injector.map(ICardUpdater).toSingleton(CardPositionUpdater);

@@ -5,7 +5,6 @@ package game.level.card.view {
 	import core.external.texture.ITextureService;
 
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
 
 	import mockolate.nice;
 	import mockolate.partial;
@@ -17,6 +16,7 @@ package game.level.card.view {
 	import org.flexunit.async.Async;
 	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
+	import org.osflash.signals.Signal;
 
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -26,13 +26,13 @@ package game.level.card.view {
 	import starling.textures.Texture;
 
 	public class TextureStateViewTest {
-		private var cardView:TextureStateView;
+		private var stateView:TextureStateView;
 		private var textureService:ITextureService;
 
 		[Before(async)]
 		public function prepareMocks():void
 		{
-			Async.handleEvent(this, prepare(ITextureService, Texture, Sprite, EventDispatcher), Event.COMPLETE, setUp);
+			Async.handleEvent(this, prepare(ITextureService, Texture, Sprite), Event.COMPLETE, setUp);
 		}
 
 
@@ -40,21 +40,17 @@ package game.level.card.view {
 		{
 			textureService = nice(ITextureService);
 			stub(textureService).method("getTexture").returns(nice(Texture));
-			cardView = new TextureStateView(textureService);
+			stateView = new TextureStateView(textureService);
+			stateView.touchSignal = new Signal();
 		}
 
 
 		[Test(async)]
-		public function shouldDispatchSelectEvent():void
+		public function shouldRunExternalOpenListenerOnTouch():void
 		{
-			cardView.eventDispatcher = new EventDispatcher();
-			cardView.addOpenListener(Async.asyncHandler(this, checkSelectEvent, 300));
-			cardView.logiclessContainer.dispatchEvent(createEndedTouchEvent());
-		}
-
-		private function checkSelectEvent(e:Event, passThroughData:Object):void
-		{
-			assertThat(e.type, equalTo(StateViewEventType.OPEN));
+			var externalOpenListener:Function = Async.asyncHandler(this, new Function(), 500);
+			stateView.addOpenListener(externalOpenListener);
+			stateView.logiclessContainer.dispatchEvent(createEndedTouchEvent());
 		}
 
 		private function createEndedTouchEvent():TouchEvent
@@ -62,7 +58,7 @@ package game.level.card.view {
 			var touches:Vector.<Touch> = new Vector.<Touch>();
 			var touch:Touch = new Touch(0);
 			touch.phase = TouchPhase.ENDED;
-			touch.target = cardView.logiclessContainer;
+			touch.target = stateView.logiclessContainer;
 			touches.push(touch);
 			return new TouchEvent(TouchEvent.TOUCH, touches);
 		}
@@ -70,10 +66,10 @@ package game.level.card.view {
 		[Test]
 		public function shouldContainOneEmptySpriteOnCreate():void
 		{
-			assertThat(cardView.numChildren, equalTo(1));
-			assertThat(cardView.getChildAt(0), instanceOf(Sprite));
-			assertThat((cardView.getChildAt(0) as Sprite).numChildren, equalTo(0));
-			assertThat(cardView.getChildAt(0), equalTo(cardView.logiclessContainer));
+			assertThat(stateView.numChildren, equalTo(1));
+			assertThat(stateView.getChildAt(0), instanceOf(Sprite));
+			assertThat((stateView.getChildAt(0) as Sprite).numChildren, equalTo(0));
+			assertThat(stateView.getChildAt(0), equalTo(stateView.logiclessContainer));
 		}
 
 		[Test]
@@ -85,50 +81,49 @@ package game.level.card.view {
 		[Test]
 		public function shouldAddOneImageWhenClosedManyTimes():void
 		{
-			cardView.logiclessContainer = partial(Sprite);
-			cardView.close();
-			cardView.close();
-			cardView.close();
-			assertThat(cardView.logiclessContainer, received().method("addChild").once().args(instanceOf(Image)));
+			stateView.logiclessContainer = partial(Sprite);
+			stateView.close();
+			stateView.close();
+			stateView.close();
+			assertThat(stateView.logiclessContainer, received().method("addChild").once().args(instanceOf(Image)));
 		}
 
 
 		[Test(async)]
 		public function shouldCloseInProvidedTime():void
 		{
-			cardView.logiclessContainer = partial(Sprite);
-			cardView.closeWithDelay(100);
+			stateView.logiclessContainer = partial(Sprite);
+			stateView.closeWithDelay(100);
 			Async.delayCall(this, checkNotClosed, 50);
-			Async.delayCall(this, checkClosed, 150);
+			Async.delayCall(this, checkClosed, 300);
 		}
 
 		private function checkNotClosed():void
 		{
-			assertThat('Was closed', cardView.logiclessContainer, received().method("addChild").never());
-
+			assertThat('Was closed', stateView.logiclessContainer, received().method("addChild").never());
 		}
 
 		private function checkClosed():void
 		{
-			assertThat('Was not closed', cardView.logiclessContainer, received().method("addChild").once());
+			assertThat('Was not closed', stateView.logiclessContainer, received().method("addChild").once());
 		}
 
 		[Test(async)]
 		public function shouldNotExecuteDelayedCloseThatWasBeforeOpen():void
 		{
-			cardView.logiclessContainer = partial(Sprite);
-			cardView.closeWithDelay(100);
+			stateView.logiclessContainer = partial(Sprite);
+			stateView.closeWithDelay(100);
 			Async.delayCall(this, function ():void
 			{
-				assertThat('Was closed', cardView.logiclessContainer, received().method("addChild").once());
+				assertThat('Was closed', stateView.logiclessContainer, received().method("addChild").once());
 			}, 110);
-			cardView.open(1);
+			stateView.open(1);
 		}
 
 		[Test]
 		public function shouldRequestForCorrectTexture():void
 		{
-			cardView.open(1);
+			stateView.open(1);
 			assertThat(textureService, received().method('getTexture').once().args(equalTo("card1")));
 		}
 
@@ -136,10 +131,10 @@ package game.level.card.view {
 		[Test]
 		public function shouldAddOneImageWhenOpenedManyTimesWithTheSameTextureId():void
 		{
-			cardView.logiclessContainer = partial(Sprite);
-			cardView.open(1);
-			cardView.open(1);
-			assertThat(cardView.logiclessContainer, received().method("addChild").once().args(instanceOf(Image)));
+			stateView.logiclessContainer = partial(Sprite);
+			stateView.open(1);
+			stateView.open(1);
+			assertThat(stateView.logiclessContainer, received().method("addChild").once().args(instanceOf(Image)));
 		}
 	}
 }

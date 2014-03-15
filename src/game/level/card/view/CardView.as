@@ -2,10 +2,9 @@
  * Created by OOliinyk on 1/12/14.
  */
 package game.level.card.view {
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
-
 	import game.level.field.model.vo.CardVo;
+
+	import org.osflash.signals.Signal;
 
 	import starling.display.Sprite;
 
@@ -13,8 +12,8 @@ package game.level.card.view {
 
 		private var vo:CardVo;
 
-		[Inject(name='local')]
-		public var eventDispatcher:EventDispatcher;
+		[Inject]
+		public var stateViewOpenedSignal:Signal;
 
 		[Inject]
 		internal var stateView:IStateView;
@@ -24,13 +23,13 @@ package game.level.card.view {
 		{
 			this.stateView = stateView;
 			addChild(stateView.getView());
-			stateView.addOpenListener(touchListener);
+			stateView.addOpenListener(stateViewOpenedListener);
 			stateView.close();
 		}
 
-		private function touchListener(event:Event):void
+		private function stateViewOpenedListener():void
 		{
-			eventDispatcher.dispatchEvent(new Event(CardViewEvent.SELECT));
+			stateViewOpenedSignal.dispatch();
 		}
 
 		public function showMatchAnimation():void
@@ -63,7 +62,7 @@ package game.level.card.view {
 
 		public function addSelectListener(listener:Function):void
 		{
-			eventDispatcher.addEventListener(CardViewEvent.SELECT, listener);
+			stateViewOpenedSignal.add(listener);
 		}
 	}
 }

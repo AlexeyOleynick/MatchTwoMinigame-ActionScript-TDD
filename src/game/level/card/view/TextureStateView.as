@@ -4,9 +4,10 @@
 package game.level.card.view {
 	import core.external.texture.ITextureService;
 
-	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
+
+	import org.osflash.signals.Signal;
 
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -18,8 +19,9 @@ package game.level.card.view {
 	public class TextureStateView extends Sprite implements IStateView {
 
 		internal var logiclessContainer:Sprite;
-		[Inject(name='local')]
-		public var eventDispatcher:EventDispatcher;
+
+		[Inject]
+		public var touchSignal:Signal;
 
 		private static const CLOSED_TEXTURE_NAME:String = "closed";
 		private static const OPEN_TEXTURE_PATTERN:String = "card";
@@ -99,7 +101,7 @@ package game.level.card.view {
 
 		public function addOpenListener(listener:Function):void
 		{
-			eventDispatcher.addEventListener(StateViewEventType.OPEN, listener);
+			touchSignal.add(listener);
 		}
 
 		private function touchListener(event:TouchEvent):void
@@ -107,10 +109,10 @@ package game.level.card.view {
 			var touch:Touch = event.getTouch(logiclessContainer, TouchPhase.ENDED);
 			if(touch){
 				if(!isWaitingForClose() || isClosed())
-					eventDispatcher.dispatchEvent(new flash.events.Event(StateViewEventType.OPEN));
+					touchSignal.dispatch();
 			}
 		}
-
+		                        //todo: ??????
 		override public function dispatchEvent(event:Event):void
 		{
 			super.dispatchEvent(event);

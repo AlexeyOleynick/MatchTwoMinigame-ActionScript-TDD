@@ -2,9 +2,9 @@
  * Created by OOliinyk on 1/12/14.
  */
 package game.level.field.view {
-	import flash.events.Event;
+	import core.stage.signal.EnterFrameSignal;
 
-	import game.level.card.view.CardViewEvent;
+	import game.level.card.signal.DisplayCardsSignal;
 	import game.level.card.view.ICardView;
 	import game.level.field.model.ICardsModel;
 
@@ -15,21 +15,24 @@ package game.level.field.view {
 		public var view:IFieldContainer;
 		[Inject]
 		public var cardsModel:ICardsModel;
+		[Inject]
+		public var displayCardsSignal:DisplayCardsSignal;
+		[Inject]
+		public var enterFrameSignal:EnterFrameSignal;
 
 
 		override public function initialize():void
 		{
-			addContextListener(Event.ENTER_FRAME, enterFrameListener);
-			addContextListener(CardViewEvent.DISPLAY, displayCardListener);
+			displayCardsSignal.add(displayCardListener);
+			enterFrameSignal.add(enterFrameListener);
 		}
 
-		private function displayCardListener(e:CardViewEvent):void
+		private function displayCardListener(cardView:ICardView):void
 		{
-			var cardView:ICardView = e.cardView;
 			view.addCard(cardView);
 		}
 
-		private function enterFrameListener(e:Event):void
+		private function enterFrameListener():void
 		{
 			cardsModel.stepForward();
 		}

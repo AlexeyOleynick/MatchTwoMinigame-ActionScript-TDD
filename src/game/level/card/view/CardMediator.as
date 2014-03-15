@@ -2,11 +2,10 @@
  * Created by OOliinyk on 1/12/14.
  */
 package game.level.card.view {
-	import flash.events.Event;
-
-	import game.level.card.model.CardsEvent;
-	import game.level.card.model.CardsEventType;
 	import game.level.card.model.ICardCollection;
+	import game.level.card.signal.CardsMatchedSignal;
+	import game.level.card.signal.CardsRemovedSignal;
+	import game.level.card.signal.CardsUpdatedSignal;
 	import game.level.field.model.ICardsModel;
 	import game.level.field.model.vo.CardVo;
 
@@ -16,46 +15,49 @@ package game.level.card.view {
 
 		[Inject]
 		public var view:ICardView;
-
 		[Inject]
 		public var cardsModel:ICardsModel;
+		[Inject]
+		public var cardsUpdatedSignal:CardsUpdatedSignal;
+		[Inject]
+		public var cardsMatchedSignal:CardsMatchedSignal;
+		[Inject]
+		public var cardsRemovedSignal:CardsRemovedSignal;
+
 
 		override public function initialize():void
 		{
-			addContextListener(CardsEventType.UPDATED, cardsUpdatedListener);
-			addContextListener(CardsEventType.REMOVED, cardsRemovedListener);
-			addContextListener(CardsEventType.MATCHED, cardsMatchedListener);
+			cardsUpdatedSignal.add(cardsUpdatedListener);
+			cardsMatchedSignal.add(cardsMatchedListener);
+			cardsRemovedSignal.add(cardsRemovedListener);
 
 			view.addSelectListener(cardSelectedListener);
 		}
 
-		private function cardsMatchedListener(e:CardsEvent):void
+		private function cardsMatchedListener(cardCollection:ICardCollection):void
 		{
 			var cardVo:CardVo = view.getCardVo();
-			var cardCollection:ICardCollection = e.cardCollection;
 			if(cardCollection.contains(cardVo)){
 				view.showMatchAnimation();
 			}
 		}
 
-		private function cardSelectedListener(event:Event):void
+		private function cardSelectedListener():void
 		{
 			cardsModel.select(view.getCardVo());
 		}
 
-		private function cardsUpdatedListener(e:CardsEvent):void
+		private function cardsUpdatedListener(cardCollection:ICardCollection):void
 		{
 			var cardVo:CardVo = view.getCardVo();
-			var cardCollection:ICardCollection = e.cardCollection;
 			if(cardCollection.contains(cardVo)){
 				view.setCardVo(cardVo);
 			}
 		}
 
-		private function cardsRemovedListener(e:CardsEvent):void
+		private function cardsRemovedListener(cardCollection:ICardCollection):void
 		{
 			var cardVo:CardVo = view.getCardVo();
-			var cardCollection:ICardCollection = e.cardCollection;
 			if(cardCollection.contains(cardVo)){
 				view.remove();
 			}
