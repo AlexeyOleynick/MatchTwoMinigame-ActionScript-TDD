@@ -48,7 +48,7 @@ package game.level.card.view {
 			stub(cardView).method("addSelectListener").args(capture(captured));
 
 			cardMediator.view = cardView;
-			stub(cardMediator.view).method("getCardVo").returns(new CardVo(10, 10, 5));
+			stub(cardMediator.view).method("getCardVo").returns(new CardVo());
 
 			cardCollection = nice(ICardCollection);
 			stub(cardCollection).method("contains").returns(true);

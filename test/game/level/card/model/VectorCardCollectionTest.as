@@ -5,6 +5,7 @@ package game.level.card.model {
 	import game.level.field.model.vo.CardVo;
 
 	import org.hamcrest.assertThat;
+	import org.hamcrest.collection.hasItems;
 	import org.hamcrest.object.equalTo;
 
 	public class VectorCardCollectionTest {
@@ -20,9 +21,12 @@ package game.level.card.model {
 		[Test]
 		public function ShouldReturnOpened():void
 		{
-			var firstCard:CardVo = new CardVo(10, 10, 5, true);
-			var secondCard:CardVo = new CardVo(20, 30, 3, false);
-			var thirdCard:CardVo = new CardVo(20, 30, 5, true);
+			var firstCard:CardVo = new CardVo();
+			firstCard.opened = true;
+			var secondCard:CardVo = new CardVo();
+			secondCard.opened = false;
+			var thirdCard:CardVo = new CardVo();
+			thirdCard.opened = true;
 			cardCollection.add(firstCard, secondCard, thirdCard);
 
 			var matchedCards:ICardCollection = cardCollection.getOpened();
@@ -37,9 +41,9 @@ package game.level.card.model {
 		[Test]
 		public function shouldSubtract():void
 		{
-			var firstCard:CardVo = new CardVo(10, 10, 5, true);
-			var secondCard:CardVo = new CardVo(20, 30, 3, false);
-			var thirdCard:CardVo = new CardVo(20, 30, 5, true);
+			var firstCard:CardVo = new CardVo();
+			var secondCard:CardVo = new CardVo();
+			var thirdCard:CardVo = new CardVo();
 			cardCollection.add(firstCard, secondCard, thirdCard);
 
 			var collectionToSubtract:VectorCardCollection = new VectorCardCollection();
@@ -53,8 +57,8 @@ package game.level.card.model {
 		[Test]
 		public function shouldReturnFirstCard():void
 		{
-			var firstCard:CardVo = new CardVo(10, 10, 5);
-			var secondCard:CardVo = new CardVo(20, 30, 5);
+			var firstCard:CardVo = new CardVo();
+			var secondCard:CardVo = new CardVo();
 			cardCollection.add(firstCard, secondCard);
 
 			assertThat(cardCollection.getFirst(), equalTo(firstCard));
@@ -64,10 +68,18 @@ package game.level.card.model {
 		[Test]
 		public function shouldFindOpenedCardsWithDifferentTypes():void
 		{
-			var firstCard:CardVo = new CardVo(10, 10, 5, true);
-			var secondCard:CardVo = new CardVo(20, 30, 3, false);
-			var thirdCard:CardVo = new CardVo(20, 30, 5, true);
-			var fourthCard:CardVo = new CardVo(25, 35, 2, true);
+			var firstCard:CardVo = new CardVo();
+			firstCard.type = 5;
+			firstCard.opened = true;
+			var secondCard:CardVo = new CardVo();
+			secondCard.type = 3;
+			secondCard.opened = false;
+			var thirdCard:CardVo = new CardVo();
+			thirdCard.type = 5;
+			thirdCard.opened = true;
+			var fourthCard:CardVo = new CardVo();
+			fourthCard.type = 2;
+			fourthCard.opened = true;
 			cardCollection.add(firstCard, secondCard, thirdCard, fourthCard);
 			var openedCards:ICardCollection = cardCollection.getOpenedWithDifferentTypes();
 			assertThat(openedCards.getSize(), equalTo(3));
@@ -76,8 +88,8 @@ package game.level.card.model {
 		[Test]
 		public function shouldIncreaseSizeOnAdd():void
 		{
-			cardCollection.add(new CardVo(10, 10, 5));
-			cardCollection.add(new CardVo(10, 10, 5));
+			cardCollection.add(new CardVo());
+			cardCollection.add(new CardVo());
 
 			assertThat(cardCollection.getSize(), equalTo(2));
 		}
@@ -85,9 +97,9 @@ package game.level.card.model {
 		[Test]
 		public function shouldContainAddedCards():void
 		{
-			var firstCard:CardVo = new CardVo(10, 10, 5);
-			var secondCard:CardVo = new CardVo(10, 10, 5);
-			var thirdCard:CardVo = new CardVo(10, 10, 5);
+			var firstCard:CardVo = new CardVo();
+			var secondCard:CardVo = new CardVo();
+			var thirdCard:CardVo = new CardVo();
 
 			cardCollection.add(firstCard);
 			cardCollection.add(secondCard);
@@ -101,8 +113,8 @@ package game.level.card.model {
 		[Test]
 		public function shouldAddCardsFromCollection():void
 		{
-			var firstCard:CardVo = new CardVo(10, 10, 5);
-			var secondCard:CardVo = new CardVo(10, 10, 5);
+			var firstCard:CardVo = new CardVo();
+			var secondCard:CardVo = new CardVo();
 
 			var collectionToAdd:ICardCollection = new VectorCardCollection();
 			collectionToAdd.add(firstCard, secondCard);
@@ -116,26 +128,29 @@ package game.level.card.model {
 		[Test]
 		public function shouldReturnVector():void
 		{
-			var firstCard:CardVo = new CardVo(10, 10, 5);
-			var secondCard:CardVo = new CardVo(10, 10, 5);
+			var firstCard:CardVo = new CardVo();
+			var secondCard:CardVo = new CardVo();
 
 			cardCollection.add(firstCard);
 			cardCollection.add(secondCard);
 
 			assertThat(cardCollection.getAll().length, equalTo(2));
+			assertThat(cardCollection.getAll(), hasItems(firstCard, secondCard));
 		}
 
 		[Test]
-		public function testRemove():void
+		public function shouldRemoveItems():void
 		{
-			var firstCard:CardVo = new CardVo(10, 10, 5);
-			var secondCard:CardVo = new CardVo(10, 10, 5);
+			var firstCard:CardVo = new CardVo();
+			var secondCard:CardVo = new CardVo();
 
 			cardCollection.add(firstCard);
 			cardCollection.add(secondCard);
 			cardCollection.remove(firstCard);
 
 			assertThat(cardCollection.getSize(), equalTo(1));
+			assertThat(cardCollection.contains(firstCard), equalTo(false
+			));
 		}
 	}
 }

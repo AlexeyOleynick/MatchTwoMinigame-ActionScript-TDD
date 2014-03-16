@@ -16,7 +16,7 @@ package game.level.field.view.factory {
 			var cardsVo:Vector.<CardVo> = cardCollection.getAll();
 			var cardViews:Vector.<ICardView> = new Vector.<ICardView>();
 			for each (var cardVo:CardVo in cardsVo){
-				var cardView = injector.instantiateUnmapped(CardView);
+				var cardView:ICardView = injector.instantiateUnmapped(CardView);
 				cardView.setCardVo(cardVo);
 				cardViews.push(cardView);
 			}

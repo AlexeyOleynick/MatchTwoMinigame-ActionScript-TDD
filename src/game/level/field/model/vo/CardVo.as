@@ -8,13 +8,12 @@ package game.level.field.model.vo {
 		public var y:Number;
 		public var opened:Boolean;
 		public var type:int;
-		                //todo: remove from constructor
-		public function CardVo(x:int, y:int, type, opened = false)
+
+		public function CardVo()
 		{
-			this.opened = opened;
-			this.x = x;
-			this.y = y;
-			this.type = type;
+			opened = false;
+			x = 0;
+			y = 0;
 		}
 
 

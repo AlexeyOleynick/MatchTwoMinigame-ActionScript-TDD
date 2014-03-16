@@ -39,7 +39,7 @@ package game.level.field.view.factory {
 
 			var cardCollection:ICardCollection = nice(ICardCollection);
 			var cardsVo:Vector.<CardVo> = new Vector.<CardVo>();
-			cardsVo.push(new CardVo(10, 20, 0));
+			cardsVo.push(new CardVo());
 			stub(cardCollection).method('getAll').returns(cardsVo);
 
 			var cardView:ICardView = cardViewFactory.generateViewsByCardCollection(cardCollection).pop();

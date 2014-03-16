@@ -20,19 +20,25 @@ package game.level.field.model.filter {
 
 	public class RemovalFilterTest {
 
-		private var firstCard:CardVo = new CardVo(10, 20, 3);
-		private var secondCard:CardVo = new CardVo(10, 20, 3);
-		private var thirdCard:CardVo = new CardVo(10, 50, 3);
-		private var fourthCard:CardVo = new CardVo(10, 100, 3);
+		private var firstCard:CardVo = new CardVo();
+		private var secondCard:CardVo = new CardVo();
+		private var thirdCard:CardVo = new CardVo();
+		private var fourthCard:CardVo = new CardVo();
 
 		private var cardCollection:ICardCollection;
 
-		[Before(async, timeout=5000)]
-		public function prepareMockolates():void
+		[Before(async)]
+		public function prepareMocks():void
 		{
 			Async.proceedOnEvent(this, prepare(IBoundsService), Event.COMPLETE);
 
 			cardCollection = new VectorCardCollection();
+
+			firstCard.y = 20;
+			secondCard.y = 20;
+			thirdCard.y = 50;
+			fourthCard.y = 100;
+
 			cardCollection.add(firstCard, secondCard, thirdCard, fourthCard);
 		}
 

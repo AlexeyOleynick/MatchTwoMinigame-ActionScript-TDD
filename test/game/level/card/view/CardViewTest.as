@@ -67,13 +67,18 @@ package game.level.card.view {
 		[Test]
 		public function shouldSetPropertiesFromVo():void
 		{
-			cardView.setCardVo(new CardVo(10, 5, 3, true));
+			var cardVo:CardVo = new CardVo();
+			cardVo.x = 10;
+			cardVo.y = 5;
+			cardVo.type = 3;
+			cardVo.opened = true;
+			cardView.setCardVo(cardVo);
 			assertThat(cardView.x, equalTo(10));
 			assertThat(cardView.y, equalTo(5));
 
 			assertThat(cardView.stateView, received().method('open').args(equalTo(3)));
 
-			cardView.setCardVo(new CardVo(10, 5, 3, false));
+			cardView.setCardVo(new CardVo());
 			assertThat(cardView.stateView, received().method('closeWithDelay').args(CardView.DELAY_FOR_CLOSE_IN_MILLISECONDS));
 		}
 

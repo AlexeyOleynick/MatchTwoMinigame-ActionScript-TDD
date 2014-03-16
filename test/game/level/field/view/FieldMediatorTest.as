@@ -7,19 +7,9 @@ package game.level.field.view {
 	import flash.events.Event;
 
 	import game.level.card.model.ICardCollection;
-
-	import game.level.card.model.ICardCollection;
-	import game.level.card.model.VectorCardCollection;
-
 	import game.level.card.signal.CardsCreatedSignal;
-
-	import game.level.card.signal.DisplayCardsSignal;
-	import game.level.card.view.CardView;
-	import game.level.card.view.ICardView;
 	import game.level.card.view.ICardView;
 	import game.level.field.model.ICardsModel;
-	import game.level.field.model.vo.CardVo;
-	import game.level.field.view.factory.ICardViewFactory;
 	import game.level.field.view.factory.ICardViewFactory;
 
 	import mockolate.nice;
@@ -30,7 +20,6 @@ package game.level.field.view {
 	import org.flexunit.async.Async;
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.equalTo;
-	import org.hamcrest.object.strictlyEqualTo;
 
 	import robotlegs.bender.extensions.localEventMap.impl.EventMap;
 
@@ -41,7 +30,7 @@ package game.level.field.view {
 		[Before(async)]
 		public function prepareMocks():void
 		{
-			Async.proceedOnEvent(this, prepare( ICardViewFactory, ICardCollection, CardsCreatedSignal, IFieldContainer, ICardsModel, ICardView), Event.COMPLETE);
+			Async.proceedOnEvent(this, prepare(ICardViewFactory, ICardCollection, CardsCreatedSignal, IFieldContainer, ICardsModel, ICardView), Event.COMPLETE);
 		}
 
 
@@ -54,7 +43,6 @@ package game.level.field.view {
 			fieldMediator.enterFrameSignal = new EnterFrameSignal();
 			fieldMediator.initialize();
 		}
-
 
 
 		[Test]

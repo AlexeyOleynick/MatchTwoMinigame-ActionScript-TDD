@@ -28,10 +28,11 @@ package game.level.field.model.generator {
 
 		private function generateNewVO():CardVo
 		{
-			var type:int = Math.floor(Math.random() * 4) + 1;
-			var x:int = Math.floor(Math.random() * boundsService.getWidth());
-			var y:int = 0;
-			return new CardVo(x, y, type);
+			var cardVo:CardVo = new CardVo();
+			cardVo.type = Math.floor(Math.random() * 4) + 1;
+			cardVo.x = Math.floor(Math.random() * boundsService.getWidth());
+			cardVo.y = 0;
+			return cardVo;
 		}
 	}
 }

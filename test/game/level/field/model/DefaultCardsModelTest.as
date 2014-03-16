@@ -64,7 +64,7 @@ package game.level.field.model {
 		[Test(async)]
 		public function shouldDispatchUpdateSignalWithOpenedCardIfClosedOnSelect():void
 		{
-			var cardVo:CardVo = new CardVo(0, 0, 0, false);
+			var cardVo:CardVo = new CardVo();
 
 			collectionWithOpenDifferentTypes.add(cardVo);
 
@@ -81,7 +81,8 @@ package game.level.field.model {
 		[Test]
 		public function shouldNotDispatchUpdateSignalIfOpenedOnSelect():void
 		{
-			var cardVo:CardVo = new CardVo(0, 0, 0, true);
+			var cardVo:CardVo = new CardVo();
+			cardVo.opened = true;
 			cardsModel.select(cardVo);
 			assertThat(cardsModel.cardsUpdatedSignal, received().method('dispatch').never());
 		}
@@ -91,7 +92,7 @@ package game.level.field.model {
 		{
 			var collectionToMatch:ICardCollection = generateCollection();
 			stub(cardsModel.cardCollection).method('getOpened').returns(collectionToMatch);
-			var cardVo:CardVo = new CardVo(0, 0, 0, false);
+			var cardVo:CardVo = new CardVo();
 			cardsModel.select(cardVo);
 			assertThat(cardsModel.cardsMatchedSignal, received().method('dispatch').args(equalTo(collectionToMatch)));
 		}
@@ -101,7 +102,7 @@ package game.level.field.model {
 		{
 			var collectionToClose:ICardCollection = generateCollection();
 			stub(cardsModel.cardCollection).method('getOpenedWithDifferentTypes').returns(collectionToClose);
-			var cardVo:CardVo = new CardVo(0, 0, 0, false);
+			var cardVo:CardVo = new CardVo();
 
 			var updatedCollectionCapture:Capture = new Capture();
 			stub(cardsModel.cardsUpdatedSignal).method('dispatch').args(capture(updatedCollectionCapture));
@@ -149,9 +150,9 @@ package game.level.field.model {
 		private function generateCollection():ICardCollection
 		{
 			var cardCollection:ICardCollection = new VectorCardCollection();
-			cardCollection.add(new CardVo(10, 10, 4));
-			cardCollection.add(new CardVo(10, 20, 4));
-			cardCollection.add(new CardVo(10, 30, 4));
+			cardCollection.add(new CardVo());
+			cardCollection.add(new CardVo());
+			cardCollection.add(new CardVo());
 			return cardCollection;
 		}
 	}

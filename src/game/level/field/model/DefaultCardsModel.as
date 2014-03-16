@@ -9,7 +9,6 @@ package game.level.field.model {
 	import game.level.card.signal.CardsMatchedSignal;
 	import game.level.card.signal.CardsRemovedSignal;
 	import game.level.card.signal.CardsUpdatedSignal;
-	import game.level.field.model.filter.CardFilterType;
 	import game.level.field.model.filter.ICardFilter;
 	import game.level.field.model.generator.ICardProducer;
 	import game.level.field.model.updater.ICardUpdater;
