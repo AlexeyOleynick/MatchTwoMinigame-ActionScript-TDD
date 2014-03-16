@@ -19,7 +19,6 @@ package {
 	import game.level.card.signal.CardsRemovedSignal;
 	import game.level.card.signal.CardsUpdatedSignal;
 	import game.level.card.view.CardMediator;
-	import game.level.card.view.CardView;
 	import game.level.card.view.ICardView;
 	import game.level.card.view.IStateView;
 	import game.level.card.view.TextureStateView;
@@ -32,6 +31,8 @@ package {
 	import game.level.field.model.filter.RemovalFilter;
 	import game.level.field.model.generator.ICardProducer;
 	import game.level.field.model.generator.InsideBoundsCardProducer;
+	import game.level.field.model.matcher.ICardMatcher;
+	import game.level.field.model.matcher.NumberCardsMatcher;
 	import game.level.field.model.solution.ISolutionService;
 	import game.level.field.model.solution.RandomSolutionService;
 	import game.level.field.model.updater.CardPositionUpdater;
@@ -90,13 +91,13 @@ package {
 			injector.map(CardsUpdatedSignal).asSingleton();
 
 			injector.map(ICardViewFactory).toSingleton(DefaultCardViewFactory);
+			injector.map(ICardMatcher).toSingleton(NumberCardsMatcher);
 
 			commandMap.map(StartupSignal).toCommand(StartupCommand);
 			commandMap.map(AddFieldSignal).toCommand(AddFieldCommand);
 
 			mediatorMap.map(StarlingStageView).toMediator(StarlingRootMediator);
 			mediatorMap.map(ICardView).toMediator(CardMediator);
-//			injector.map(ICardView).toType(CardView);
 			mediatorMap.map(IFieldContainer).toMediator(FieldMediator);
 
 			injector.map(IContextModel).toSingleton(BasicContextModel);

@@ -5,6 +5,8 @@ package game.level.field.model {
 	import flash.events.Event;
 
 	import game.level.card.model.ICardCollection;
+
+	import game.level.card.model.ICardCollection;
 	import game.level.card.model.VectorCardCollection;
 	import game.level.card.signal.CardsCreatedSignal;
 	import game.level.card.signal.CardsMatchedSignal;
@@ -12,6 +14,7 @@ package game.level.field.model {
 	import game.level.card.signal.CardsUpdatedSignal;
 	import game.level.field.model.filter.ICardFilter;
 	import game.level.field.model.generator.ICardProducer;
+	import game.level.field.model.matcher.ICardMatcher;
 	import game.level.field.model.updater.ICardUpdater;
 	import game.level.field.model.vo.CardVo;
 
@@ -36,7 +39,7 @@ package game.level.field.model {
 		[Before(async, timeout=5000)]
 		public function prepareMockolates():void
 		{
-			Async.handleEvent(this, prepare(CardsRemovedSignal, CardsCreatedSignal, CardsMatchedSignal, CardsUpdatedSignal, CardVo, ICardFilter, VectorCardCollection, ICardUpdater, ICardProducer), Event.COMPLETE, setUp);
+			Async.handleEvent(this, prepare(ICardCollection, ICardMatcher, CardsRemovedSignal, CardsCreatedSignal, CardsMatchedSignal, CardsUpdatedSignal, CardVo, ICardFilter, VectorCardCollection, ICardUpdater, ICardProducer), Event.COMPLETE, setUp);
 		}
 
 		private function setUp(e:Event, passThrough:Object):void
@@ -77,7 +80,6 @@ package game.level.field.model {
 			assertThat(cardCollection.contains(cardVo), equalTo(true));
 		}
 
-
 		[Test]
 		public function shouldNotDispatchUpdateSignalIfOpenedOnSelect():void
 		{
@@ -88,30 +90,35 @@ package game.level.field.model {
 		}
 
 		[Test]
-		public function matchSignalShouldContainMatchedCards():void
+		public function shouldDispatchMatchSignalIfMatchedCardsPresent():void
 		{
 			var collectionToMatch:ICardCollection = generateCollection();
-			stub(cardsModel.cardCollection).method('getOpened').returns(collectionToMatch);
+
+			cardsModel.cardsMatcher = nice(ICardMatcher);
+			stub(cardsModel.cardsMatcher).method('hasCardsToMatch').returns(true);
+			stub(cardsModel.cardsMatcher).method('getCardsToMatch').returns(collectionToMatch);
+
 			var cardVo:CardVo = new CardVo();
+
 			cardsModel.select(cardVo);
 			assertThat(cardsModel.cardsMatchedSignal, received().method('dispatch').args(equalTo(collectionToMatch)));
+			assertThat(cardsModel.cardCollection, received().method('removeCards').args(equalTo(collectionToMatch)));
 		}
 
 		[Test]
-		public function updateSignalShouldContainClosedCards():void
+		public function shouldDispatchUpdateSignalWithClosedCardsIfCardsToClosePresent():void
 		{
-			var collectionToClose:ICardCollection = generateCollection();
-			stub(cardsModel.cardCollection).method('getOpenedWithDifferentTypes').returns(collectionToClose);
+			var collectionToClose:ICardCollection = nice(ICardCollection);
+
+			cardsModel.cardsMatcher = nice(ICardMatcher);
+			stub(cardsModel.cardsMatcher).method('hasCardsToClose').returns(true);
+			stub(cardsModel.cardsMatcher).method('getCardsToClose').returns(collectionToClose);
+
 			var cardVo:CardVo = new CardVo();
 
-			var updatedCollectionCapture:Capture = new Capture();
-			stub(cardsModel.cardsUpdatedSignal).method('dispatch').args(capture(updatedCollectionCapture));
 			cardsModel.select(cardVo);
-			var updatedCollection:ICardCollection = updatedCollectionCapture.values.pop();
-
-			for each (var cardToClose:CardVo in updatedCollection.getAll()){
-				assertThat(updatedCollection.contains(cardToClose), true);
-			}
+			assertThat(collectionToClose, received().method('closeAll'));
+			assertThat(cardsModel.cardsUpdatedSignal, received().method('dispatch').args(equalTo(collectionToClose)));
 		}
 
 		[Test]

@@ -32,7 +32,7 @@ package game.level.card.model {
 				if(cardVo.opened) openedCards.add(cardVo);
 			}
 
-			if(openedCards.getSize() > 1){
+			if(openedCards.getSize() > 0){
 				var type:int = openedCards.getFirst().type;
 				for each (var openedCardVo:CardVo in openedCards.getAll()){
 					if(type != openedCardVo.type) return openedCards;

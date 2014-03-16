@@ -11,6 +11,7 @@ package game.level.field.model {
 	import game.level.card.signal.CardsUpdatedSignal;
 	import game.level.field.model.filter.ICardFilter;
 	import game.level.field.model.generator.ICardProducer;
+	import game.level.field.model.matcher.ICardMatcher;
 	import game.level.field.model.updater.ICardUpdater;
 	import game.level.field.model.vo.CardVo;
 
@@ -18,7 +19,6 @@ package game.level.field.model {
 
 		[Inject]
 		public var cardCollection:ICardCollection;
-
 		[Inject(name='REMOVAL')]
 		public var removalFilter:ICardFilter;
 		[Inject]
@@ -33,42 +33,28 @@ package game.level.field.model {
 		public var cardsCreatedSignal:CardsCreatedSignal;
 		[Inject]
 		public var cardsRemovedSignal:CardsRemovedSignal;
+		[Inject]
+		public var cardsMatcher:ICardMatcher;
 
 		public function select(cardVo:CardVo):void
 		{
 			if(!cardVo.opened){
-				openCard(cardVo);
-				var cardsToUpdateCollection:ICardCollection = closeNotMatched();
-				cardsToUpdateCollection.add(cardVo);
-				cardsUpdatedSignal.dispatch(cardsToUpdateCollection);
-				matchCards();
+				cardVo.opened = true;
+				var openCardCollection:ICardCollection = new VectorCardCollection();
+				openCardCollection.add(cardVo);
+				cardsUpdatedSignal.dispatch(openCardCollection);
 			}
-		}
 
-		private function openCard(cardVo:CardVo):void
-		{
-			cardVo.opened = true;
-			var openCardCollection:ICardCollection = new VectorCardCollection();
-			openCardCollection.add(cardVo);
-			cardsUpdatedSignal.dispatch(openCardCollection);
-		}
-
-		private function closeNotMatched():ICardCollection
-		{
-			var cardsToClose:ICardCollection = cardCollection.getOpenedWithDifferentTypes();
-			if(cardsToClose.getSize() > 1){
-				cardsToClose.closeAll();
-			}
-			return cardsToClose;
-		}
-
-		//todo: move it to cardsMatcher
-		private function matchCards():void
-		{
-			var matchedCards:ICardCollection = cardCollection.getOpened();
-			if(matchedCards.getSize() > 1){
+			if(cardsMatcher.hasCardsToMatch(cardCollection)){
+				var matchedCards:ICardCollection = cardsMatcher.getCardsToMatch(cardCollection);
 				cardsMatchedSignal.dispatch(matchedCards);
 				cardCollection.removeCards(matchedCards);
+			}
+
+			if(cardsMatcher.hasCardsToClose(cardCollection)){
+				var cardsToClose:ICardCollection = cardsMatcher.getCardsToClose(cardCollection);
+				cardsToClose.closeAll();
+				cardsUpdatedSignal.dispatch(cardsToClose);
 			}
 		}
 
