@@ -4,6 +4,8 @@
 package game.level.card.view {
 	import game.level.field.model.vo.CardVo;
 
+	import org.osflash.signals.ISignal;
+
 	import org.osflash.signals.Signal;
 
 	import starling.display.Sprite;
@@ -13,7 +15,7 @@ package game.level.card.view {
 		private var vo:CardVo;
 
 		[Inject]
-		public var stateViewOpenedSignal:Signal;
+		public var stateViewOpenedSignal:ISignal;
 
 		[Inject]
 		internal var stateView:IStateView;

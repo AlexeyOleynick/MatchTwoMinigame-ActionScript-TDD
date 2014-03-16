@@ -12,15 +12,12 @@ package {
 	import core.stage.signal.AddToStageSignal;
 	import core.stage.signal.EnterFrameSignal;
 
-
-	import game.level.card.controller.DisplayCardCommand;
 	import game.level.card.model.ICardCollection;
 	import game.level.card.model.VectorCardCollection;
 	import game.level.card.signal.CardsCreatedSignal;
 	import game.level.card.signal.CardsMatchedSignal;
 	import game.level.card.signal.CardsRemovedSignal;
 	import game.level.card.signal.CardsUpdatedSignal;
-	import game.level.card.signal.DisplayCardsSignal;
 	import game.level.card.view.CardMediator;
 	import game.level.card.view.CardView;
 	import game.level.card.view.ICardView;
@@ -42,6 +39,8 @@ package {
 	import game.level.field.signal.AddFieldSignal;
 	import game.level.field.view.FieldMediator;
 	import game.level.field.view.IFieldContainer;
+	import game.level.field.view.factory.DefaultCardViewFactory;
+	import game.level.field.view.factory.ICardViewFactory;
 	import game.startup.StartupCommand;
 
 	import org.osflash.signals.ISignal;
@@ -80,8 +79,7 @@ package {
 			context.logLevel = LogLevel.DEBUG;
 			logger.info("configuring application");
 
-			//todo: ????
-			injector.map(Signal).toType(Signal);
+			injector.map(ISignal).toType(Signal);
 
 			injector.map(EnterFrameSignal).asSingleton();
 			injector.map(AddToStageSignal).asSingleton();
@@ -91,15 +89,14 @@ package {
 			injector.map(CardsRemovedSignal).asSingleton();
 			injector.map(CardsUpdatedSignal).asSingleton();
 
-			injector.map(DisplayCardsSignal).asSingleton();
+			injector.map(ICardViewFactory).toSingleton(DefaultCardViewFactory);
 
 			commandMap.map(StartupSignal).toCommand(StartupCommand);
 			commandMap.map(AddFieldSignal).toCommand(AddFieldCommand);
-			commandMap.map(CardsCreatedSignal).toCommand(DisplayCardCommand);
 
 			mediatorMap.map(StarlingStageView).toMediator(StarlingRootMediator);
 			mediatorMap.map(ICardView).toMediator(CardMediator);
-			injector.map(ICardView, 'not for mediator').toType(CardView);
+//			injector.map(ICardView).toType(CardView);
 			mediatorMap.map(IFieldContainer).toMediator(FieldMediator);
 
 			injector.map(IContextModel).toSingleton(BasicContextModel);
@@ -109,7 +106,7 @@ package {
 			injector.map(ICardsModel).toSingleton(DefaultCardsModel);
 			injector.map(ITextureService).toSingleton(SpriteSheetTextureService);
 
-			injector.map(ICardFilter, 'removal filter').toSingleton(RemovalFilter);
+			injector.map(ICardFilter, 'REMOVAL').toSingleton(RemovalFilter);
 			injector.map(ICardUpdater).toSingleton(CardPositionUpdater);
 			injector.map(ICardProducer).toSingleton(InsideBoundsCardProducer);
 			injector.map(ICardCollection).toSingleton(VectorCardCollection);

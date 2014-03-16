@@ -7,6 +7,8 @@ package game.level.card.view {
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 
+	import org.osflash.signals.ISignal;
+
 	import org.osflash.signals.Signal;
 
 	import starling.display.Image;
@@ -21,7 +23,7 @@ package game.level.card.view {
 		internal var logiclessContainer:Sprite;
 
 		[Inject]
-		public var touchSignal:Signal;
+		public var touchSignal:ISignal;
 
 		private static const CLOSED_TEXTURE_NAME:String = "closed";
 		private static const OPEN_TEXTURE_PATTERN:String = "card";

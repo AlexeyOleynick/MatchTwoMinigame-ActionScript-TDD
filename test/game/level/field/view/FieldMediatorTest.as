@@ -6,16 +6,30 @@ package game.level.field.view {
 
 	import flash.events.Event;
 
+	import game.level.card.model.ICardCollection;
+
+	import game.level.card.model.ICardCollection;
+	import game.level.card.model.VectorCardCollection;
+
+	import game.level.card.signal.CardsCreatedSignal;
+
 	import game.level.card.signal.DisplayCardsSignal;
+	import game.level.card.view.CardView;
+	import game.level.card.view.ICardView;
 	import game.level.card.view.ICardView;
 	import game.level.field.model.ICardsModel;
+	import game.level.field.model.vo.CardVo;
+	import game.level.field.view.factory.ICardViewFactory;
+	import game.level.field.view.factory.ICardViewFactory;
 
 	import mockolate.nice;
 	import mockolate.prepare;
 	import mockolate.received;
+	import mockolate.stub;
 
 	import org.flexunit.async.Async;
 	import org.hamcrest.assertThat;
+	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.strictlyEqualTo;
 
 	import robotlegs.bender.extensions.localEventMap.impl.EventMap;
@@ -27,7 +41,7 @@ package game.level.field.view {
 		[Before(async)]
 		public function prepareMocks():void
 		{
-			Async.proceedOnEvent(this, prepare(DisplayCardsSignal, IFieldContainer, ICardsModel, ICardView), Event.COMPLETE);
+			Async.proceedOnEvent(this, prepare( ICardViewFactory, ICardCollection, CardsCreatedSignal, IFieldContainer, ICardsModel, ICardView), Event.COMPLETE);
 		}
 
 
@@ -36,10 +50,12 @@ package game.level.field.view {
 		{
 			fieldMediator = new FieldMediator();
 			fieldMediator.eventMap = new EventMap();
-			fieldMediator.displayCardsSignal = new DisplayCardsSignal();
+			fieldMediator.cardsCreatedSignal = new CardsCreatedSignal();
 			fieldMediator.enterFrameSignal = new EnterFrameSignal();
 			fieldMediator.initialize();
 		}
+
+
 
 		[Test]
 		public function shouldUpdateModelOnEnterFrame():void
@@ -53,13 +69,16 @@ package game.level.field.view {
 		[Test]
 		public function shouldAddCardToView():void
 		{
-			var fieldContainer:IFieldContainer = nice(IFieldContainer);
-			fieldMediator.view = fieldContainer;
-			var cardView:ICardView = nice(ICardView);
+			fieldMediator.fieldContainer = nice(IFieldContainer);
 
-			fieldMediator.displayCardsSignal.dispatch(cardView);
+			fieldMediator.viewFactory = nice(ICardViewFactory);
+			var cardViews:Vector.<ICardView> = new Vector.<ICardView>();
+			cardViews.push(nice(ICardView));
+			stub(fieldMediator.viewFactory).method('generateViewsByCardCollection').returns(cardViews);
 
-			assertThat(fieldContainer, received().method("addCard").args(strictlyEqualTo(cardView)));
+			fieldMediator.cardsCreatedSignal.dispatch(nice(ICardCollection));
+
+			assertThat(fieldMediator.fieldContainer, received().method('addCard').arg(equalTo(cardViews.pop())));
 		}
 	}
 }
