@@ -2,14 +2,12 @@ package game.level.field.model.matcher {
 	import flash.events.Event;
 
 	import game.level.card.model.ICardCollection;
-	import game.level.field.model.vo.CardVo;
 
 	import mockolate.nice;
 	import mockolate.prepare;
 	import mockolate.stub;
 
 	import org.flexunit.async.Async;
-
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.equalTo;
 

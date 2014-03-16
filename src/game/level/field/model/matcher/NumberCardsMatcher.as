@@ -2,7 +2,7 @@ package game.level.field.model.matcher {
 	import game.level.card.model.ICardCollection;
 	import game.level.card.model.VectorCardCollection;
 
-	public class NumberCardsMatcher implements ICardMatcher{
+	public class NumberCardsMatcher implements ICardMatcher {
 		internal const MIN_NUMBER_TO_MATCH:int = 2;
 
 
@@ -17,8 +17,7 @@ package game.level.field.model.matcher {
 		{
 			if(hasCardsToMatch(cardCollection)){
 				return cardCollection.getOpened();
-			}
-			else return new VectorCardCollection();
+			} else return new VectorCardCollection();
 		}
 
 		public function hasCardsToClose(cardCollection:ICardCollection):Boolean
@@ -31,8 +30,7 @@ package game.level.field.model.matcher {
 		{
 			if(hasCardsToClose(cardCollection)){
 				return cardCollection.getOpenedWithDifferentTypes();
-			}
-			else return new VectorCardCollection();
+			} else return new VectorCardCollection();
 		}
 	}
 }

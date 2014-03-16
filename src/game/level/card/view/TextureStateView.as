@@ -9,11 +9,8 @@ package game.level.card.view {
 
 	import org.osflash.signals.ISignal;
 
-	import org.osflash.signals.Signal;
-
 	import starling.display.Image;
 	import starling.display.Sprite;
-	import starling.events.Event;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;

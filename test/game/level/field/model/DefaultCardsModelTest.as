@@ -5,8 +5,6 @@ package game.level.field.model {
 	import flash.events.Event;
 
 	import game.level.card.model.ICardCollection;
-
-	import game.level.card.model.ICardCollection;
 	import game.level.card.model.VectorCardCollection;
 	import game.level.card.signal.CardsCreatedSignal;
 	import game.level.card.signal.CardsMatchedSignal;

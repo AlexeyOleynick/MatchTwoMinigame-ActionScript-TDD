@@ -3,7 +3,7 @@ package game.level.card.signal {
 
 	import org.osflash.signals.Signal;
 
-	public class CardsRemovedSignal extends Signal{
+	public class CardsRemovedSignal extends Signal {
 		public function CardsRemovedSignal()
 		{
 			super(ICardCollection);

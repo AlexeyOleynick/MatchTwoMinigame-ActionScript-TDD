@@ -4,7 +4,6 @@ package game.startup {
 	import game.level.field.signal.AddFieldSignal;
 
 	import mockolate.nice;
-
 	import mockolate.prepare;
 	import mockolate.received;
 
@@ -16,7 +15,7 @@ package game.startup {
 		[Before(async)]
 		public function prepareMocks():void
 		{
-			Async.proceedOnEvent(this, prepare(AddFieldSignal),Event.COMPLETE);
+			Async.proceedOnEvent(this, prepare(AddFieldSignal), Event.COMPLETE);
 		}
 
 		[Test(async)]

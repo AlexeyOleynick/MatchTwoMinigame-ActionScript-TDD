@@ -3,6 +3,7 @@ package core.external.texture {
 
 	public interface ISpriteSheetInfoProvider {
 		function getBitmap():Bitmap;
+
 		function getXML():XML;
 	}
 }

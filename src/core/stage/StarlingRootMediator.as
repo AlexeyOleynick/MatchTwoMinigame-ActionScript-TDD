@@ -6,7 +6,6 @@ package core.stage {
 	import core.stage.signal.AddToStageSignal;
 	import core.stage.signal.EnterFrameSignal;
 
-
 	import robotlegs.bender.bundles.mvcs.Mediator;
 
 	import starling.events.EnterFrameEvent;

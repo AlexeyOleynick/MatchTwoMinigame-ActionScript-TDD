@@ -149,8 +149,7 @@ package game.level.card.model {
 			cardCollection.remove(firstCard);
 
 			assertThat(cardCollection.getSize(), equalTo(1));
-			assertThat(cardCollection.contains(firstCard), equalTo(false
-			));
+			assertThat(cardCollection.contains(firstCard), equalTo(false));
 		}
 	}
 }

@@ -1,6 +1,4 @@
 package game.level.field.view.factory {
-	import asx.array.inject;
-
 	import flash.events.Event;
 
 	import game.level.card.model.ICardCollection;
@@ -14,7 +12,6 @@ package game.level.field.view.factory {
 	import mockolate.stub;
 
 	import org.flexunit.async.Async;
-
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.instanceOf;
 

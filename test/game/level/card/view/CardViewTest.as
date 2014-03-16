@@ -9,7 +9,6 @@ package game.level.card.view {
 	import mockolate.capture;
 	import mockolate.ingredients.Capture;
 	import mockolate.nice;
-	import mockolate.partial;
 	import mockolate.prepare;
 	import mockolate.received;
 	import mockolate.stub;
@@ -17,7 +16,6 @@ package game.level.card.view {
 	import org.flexunit.async.Async;
 	import org.hamcrest.assertThat;
 	import org.hamcrest.object.equalTo;
-	import org.hamcrest.object.instanceOf;
 	import org.osflash.signals.Signal;
 
 	import starling.display.Sprite;
@@ -59,7 +57,7 @@ package game.level.card.view {
 		[Test(async)]
 		public function shouldRunExternalSelectListenerWhenStateViewDispatchSelectEvent():void
 		{
-			var externalSelectListener:Function = Async.asyncHandler(this, new Function(),500);
+			var externalSelectListener:Function = Async.asyncHandler(this, new Function(), 500);
 			cardView.addSelectListener(externalSelectListener);
 			selectListener();
 		}

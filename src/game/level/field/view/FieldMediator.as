@@ -5,7 +5,6 @@ package game.level.field.view {
 	import core.stage.signal.EnterFrameSignal;
 
 	import game.level.card.model.ICardCollection;
-
 	import game.level.card.signal.CardsCreatedSignal;
 	import game.level.card.view.ICardView;
 	import game.level.field.model.ICardsModel;

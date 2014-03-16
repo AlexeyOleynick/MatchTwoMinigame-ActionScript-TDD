@@ -1,7 +1,7 @@
 package core.signal {
 	import org.osflash.signals.Signal;
 
-	public class StartupSignal extends Signal{
+	public class StartupSignal extends Signal {
 
 	}
 }

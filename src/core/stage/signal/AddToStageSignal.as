@@ -3,7 +3,7 @@ package core.stage.signal {
 
 	import org.osflash.signals.Signal;
 
-	public class AddToStageSignal extends Signal{
+	public class AddToStageSignal extends Signal {
 		public function AddToStageSignal()
 		{
 			super(IViewContainer);

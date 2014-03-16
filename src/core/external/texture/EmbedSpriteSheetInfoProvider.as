@@ -1,7 +1,7 @@
 package core.external.texture {
 	import flash.display.Bitmap;
 
-	public class EmbedSpriteSheetInfoProvider implements ISpriteSheetInfoProvider{
+	public class EmbedSpriteSheetInfoProvider implements ISpriteSheetInfoProvider {
 
 		[Embed(source="/../media/sprite.xml", mimeType="application/octet-stream")]
 		private const AssetsLayoutXml:Class;
