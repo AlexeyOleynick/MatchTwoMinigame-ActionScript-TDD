@@ -53,6 +53,7 @@ package game.level.field.model {
 			cardsModel.cardsMatchedSignal = nice(CardsMatchedSignal);
 			cardsModel.cardsCreatedSignal = nice(CardsCreatedSignal);
 			cardsModel.cardsRemovedSignal = nice(CardsRemovedSignal);
+			cardsModel.cardsMatcher = nice(ICardMatcher);
 
 			collectionToRemove = generateCollection();
 			stub(cardsModel.removalFilter).method('filter').returns(collectionToRemove);
@@ -94,7 +95,6 @@ package game.level.field.model {
 		{
 			var collectionToMatch:ICardCollection = generateCollection();
 
-			cardsModel.cardsMatcher = nice(ICardMatcher);
 			stub(cardsModel.cardsMatcher).method('hasCardsToMatch').returns(true);
 			stub(cardsModel.cardsMatcher).method('getCardsToMatch').returns(collectionToMatch);
 
