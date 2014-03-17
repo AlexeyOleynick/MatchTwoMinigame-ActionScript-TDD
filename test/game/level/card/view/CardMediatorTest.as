@@ -20,8 +20,11 @@ package game.level.card.view {
 
 	import org.flexunit.async.Async;
 	import org.hamcrest.assertThat;
+	import org.hamcrest.object.equalTo;
 	import org.hamcrest.object.instanceOf;
 	import org.hamcrest.object.strictlyEqualTo;
+
+	import robotlegs.bender.extensions.localEventMap.api.IEventMap;
 
 	public class CardMediatorTest {
 
@@ -33,7 +36,7 @@ package game.level.card.view {
 		[Before(async)]
 		public function prepareMocks():void
 		{
-			Async.handleEvent(this, prepare(ICardView, ICardCollection, ICardsModel), Event.COMPLETE, setUp);
+			Async.handleEvent(this, prepare(IEventMap, ICardView, ICardCollection, ICardsModel), Event.COMPLETE, setUp);
 		}
 
 
@@ -91,5 +94,14 @@ package game.level.card.view {
 		}
 
 
+		[Test]
+		public function shouldRemoveListenersFromSignals():void
+		{
+			cardMediator.eventMap = nice(IEventMap)
+			cardMediator.postDestroy();
+			assertThat(cardMediator.cardsMatchedSignal.numListeners, equalTo(0))
+			assertThat(cardMediator.cardsRemovedSignal.numListeners, equalTo(0))
+			assertThat(cardMediator.cardsUpdatedSignal.numListeners, equalTo(0))
+		}
 	}
 }

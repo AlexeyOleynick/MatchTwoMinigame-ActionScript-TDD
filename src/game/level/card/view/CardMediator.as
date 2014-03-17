@@ -62,5 +62,14 @@ package game.level.card.view {
 				view.remove();
 			}
 		}
+
+
+		override public function postDestroy():void
+		{
+			super.postDestroy();
+			cardsUpdatedSignal.remove(cardsUpdatedListener);
+			cardsMatchedSignal.remove(cardsMatchedListener);
+			cardsRemovedSignal.remove(cardsRemovedListener);
+		}
 	}
 }
