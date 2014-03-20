@@ -17,13 +17,14 @@ package game.level.card.view {
 
 		[Inject]
 		internal var stateView:IStateView;
+
 		public static const DELAY_FOR_CLOSE_IN_MILLISECONDS:int = 500;
 
 		public function CardView(stateView:IStateView)
 		{
 			this.stateView = stateView;
 			addChild(stateView.getView());
-			stateView.addOpenListener(stateViewOpenedListener);
+			stateView.addOpenRequestListener(stateViewOpenedListener);
 			stateView.close();
 		}
 
@@ -52,7 +53,8 @@ package game.level.card.view {
 			this.vo = cardVo;
 			x = cardVo.x;
 			y = cardVo.y;
-			if(cardVo.opened) stateView.open(cardVo.type); else stateView.closeWithDelay(DELAY_FOR_CLOSE_IN_MILLISECONDS);
+			if(cardVo.opened) stateView.open(cardVo.type);
+			else stateView.closeWithDelay(DELAY_FOR_CLOSE_IN_MILLISECONDS);
 		}
 
 		public function getView():Sprite

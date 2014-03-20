@@ -8,7 +8,7 @@ package game.level.card.view {
 
 		function open(imageId:int):void;
 
-		function addOpenListener(listener:Function):void;
+		function addOpenRequestListener(listener:Function):void;
 
 		function closeWithDelay(timeInMilliseconds:int):void;
 

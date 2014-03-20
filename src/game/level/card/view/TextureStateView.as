@@ -2,10 +2,10 @@
  * Created by OOliinyk on 1/24/14.
  */
 package game.level.card.view {
-	import core.external.texture.ITextureService;
-
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
+
+	import game.level.card.view.texture.ICardTextureProvider;
 
 	import org.osflash.signals.ISignal;
 
@@ -22,20 +22,17 @@ package game.level.card.view {
 		[Inject]
 		public var touchSignal:ISignal;
 
-		private static const CLOSED_TEXTURE_NAME:String = "closed";
-		private static const OPEN_TEXTURE_PATTERN:String = "card";
+		[Inject]
+		public var cardTextureProvider:ICardTextureProvider;
 
-		internal var closedImage:Image;
+		private var currentState:CardViewStateEnum;
+
 		private var openedImage:Image;
-		private var currentTextureName:String;
-		private var textureService:ITextureService;
 		private var closeTimer:Timer;
 
-		public function TextureStateView(textureService:ITextureService)
+		public function TextureStateView()
 		{
-			this.textureService = textureService;
-			closedImage = new Image(textureService.getTexture(CLOSED_TEXTURE_NAME));
-			currentTextureName = '';
+			currentState = CardViewStateEnum.NO_STATE;
 			logiclessContainer = new Sprite();
 			logiclessContainer.addEventListener(TouchEvent.TOUCH, touchListener);
 			addChild(logiclessContainer);
@@ -43,39 +40,29 @@ package game.level.card.view {
 
 		public function open(textureId:int):void
 		{
-			var textureName:String = getTextureNameById(textureId);
-			if(currentTextureName != textureName){
-				openedImage = new Image(textureService.getTexture(textureName));
+			if(currentState != CardViewStateEnum.OPENED_STATE){
+				openedImage = new Image(cardTextureProvider.getOpenedTexture(textureId));
 				setImage(openedImage);
-				currentTextureName = textureName;
 				if(closeTimer) closeTimer.stop();
+				currentState = CardViewStateEnum.OPENED_STATE;
 			}
-		}
-
-		private function getTextureNameById(textureId:int):String
-		{
-			return OPEN_TEXTURE_PATTERN + textureId;
 		}
 
 		public function close():void
 		{
-			if(!isClosed()){
-				setImage(closedImage);
-				currentTextureName = CLOSED_TEXTURE_NAME;
+			if(currentState != CardViewStateEnum.CLOSED_STATE){
+				setImage(new Image(cardTextureProvider.getClosedTexture()));
+				currentState = CardViewStateEnum.CLOSED_STATE;
 			}
-		}
-
-		private function isClosed():Boolean
-		{
-			return currentTextureName == CLOSED_TEXTURE_NAME;
 		}
 
 		public function closeWithDelay(delayInMilliseconds:int):void
 		{
-			if(!isWaitingForClose() && !isClosed()){
+			if(currentState != CardViewStateEnum.WAITING_FOR_CLOSE_STATE){
 				closeTimer = new Timer(delayInMilliseconds, 1);
 				closeTimer.addEventListener(TimerEvent.TIMER_COMPLETE, closeTimerCompleteListener)
 				closeTimer.start();
+				currentState = CardViewStateEnum.WAITING_FOR_CLOSE_STATE;
 			}
 		}
 
@@ -85,20 +72,13 @@ package game.level.card.view {
 			close();
 		}
 
-		private function isWaitingForClose():Boolean
-		{
-			if(closeTimer == null) return false;
-			return closeTimer.running;
-		}
-
 		private function setImage(image:Image):void
 		{
 			logiclessContainer.removeChildren();
 			logiclessContainer.addChild(image);
 		}
 
-
-		public function addOpenListener(listener:Function):void
+		public function addOpenRequestListener(listener:Function):void
 		{
 			touchSignal.add(listener);
 		}
@@ -107,8 +87,7 @@ package game.level.card.view {
 		{
 			var touch:Touch = event.getTouch(logiclessContainer, TouchPhase.ENDED);
 			if(touch){
-				if(!isWaitingForClose() || isClosed())
-					touchSignal.dispatch();
+				touchSignal.dispatch();
 			}
 		}
 

@@ -2,9 +2,9 @@
  * Created by OOliinyk on 1/24/14.
  */
 package game.level.card.view {
-	import core.external.texture.ITextureService;
-
 	import flash.events.Event;
+
+	import game.level.card.view.texture.ICardTextureProvider;
 
 	import mockolate.nice;
 	import mockolate.partial;
@@ -27,29 +27,28 @@ package game.level.card.view {
 
 	public class TextureStateViewTest {
 		private var stateView:TextureStateView;
-		private var textureService:ITextureService;
 
 		[Before(async)]
 		public function prepareMocks():void
 		{
-			Async.handleEvent(this, prepare(ITextureService, Texture, Sprite), Event.COMPLETE, setUp);
+			Async.handleEvent(this, prepare(ICardTextureProvider, Texture, Sprite), Event.COMPLETE, setUp);
 		}
 
 
 		private function setUp(e:Event, pathThroughData:Object):void
 		{
-			textureService = nice(ITextureService);
-			stub(textureService).method("getTexture").returns(nice(Texture));
-			stateView = new TextureStateView(textureService);
+			stateView = new TextureStateView();
+			stateView.cardTextureProvider = nice(ICardTextureProvider);
+			stub(stateView.cardTextureProvider).method('getOpenedTexture').returns(nice(Texture));
+			stub(stateView.cardTextureProvider).method('getClosedTexture').returns(nice(Texture));
 			stateView.touchSignal = new Signal();
 		}
-
 
 		[Test(async)]
 		public function shouldRunExternalOpenListenerOnTouch():void
 		{
 			var externalOpenListener:Function = Async.asyncHandler(this, new Function(), 500);
-			stateView.addOpenListener(externalOpenListener);
+			stateView.addOpenRequestListener(externalOpenListener);
 			stateView.logiclessContainer.dispatchEvent(createEndedTouchEvent());
 		}
 
@@ -70,12 +69,6 @@ package game.level.card.view {
 			assertThat(stateView.getChildAt(0), instanceOf(Sprite));
 			assertThat((stateView.getChildAt(0) as Sprite).numChildren, equalTo(0));
 			assertThat(stateView.getChildAt(0), equalTo(stateView.logiclessContainer));
-		}
-
-		[Test]
-		public function shouldRequestForClosedTextureOnCreation():void
-		{
-			assertThat(textureService, received().method('getTexture').once().args(equalTo("closed")));
 		}
 
 		[Test]
@@ -119,14 +112,6 @@ package game.level.card.view {
 			}, 110);
 			stateView.open(1);
 		}
-
-		[Test]
-		public function shouldRequestForCorrectTexture():void
-		{
-			stateView.open(1);
-			assertThat(textureService, received().method('getTexture').once().args(equalTo("card1")));
-		}
-
 
 		[Test]
 		public function shouldAddOneImageWhenOpenedManyTimesWithTheSameTextureId():void

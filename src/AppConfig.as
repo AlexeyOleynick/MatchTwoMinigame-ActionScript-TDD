@@ -22,6 +22,8 @@ package {
 	import game.level.card.view.ICardView;
 	import game.level.card.view.IStateView;
 	import game.level.card.view.TextureStateView;
+	import game.level.card.view.texture.CardTextureProvider;
+	import game.level.card.view.texture.ICardTextureProvider;
 	import game.level.field.controller.AddFieldCommand;
 	import game.level.field.model.DefaultCardsModel;
 	import game.level.field.model.ICardsModel;
@@ -98,6 +100,7 @@ package {
 
 			mediatorMap.map(StarlingStageView).toMediator(StarlingRootMediator);
 			mediatorMap.map(ICardView).toMediator(CardMediator);
+			injector.map(ICardTextureProvider).toSingleton(CardTextureProvider);
 			mediatorMap.map(IFieldContainer).toMediator(FieldMediator);
 
 			injector.map(IContextModel).toSingleton(BasicContextModel);
